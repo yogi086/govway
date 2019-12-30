@@ -75,6 +75,10 @@ import org.openspcoop2.web.monitor.transazioni.dao.TransazioniService;
  * 
  */
 public class TransazioniHelper {
+	
+	public static boolean isEmpty(IDSoggetto _this) {
+		return StringUtils.isEmpty(_this.getTipo()) || StringUtils.isEmpty(_this.getNome()); 
+	}
 
 	public static final void overrideFiltroApiBase(String tag, FiltroApiBase filtro_api, String azione, IDSoggetto erogatore, TransazioniSearchForm search, MonitoraggioEnv env) {
 		
@@ -96,9 +100,27 @@ public class TransazioniHelper {
 			}
 
 		}
-
-		String uri = ReportisticaHelper.buildNomeServizioForOverride(filtro_api.getNome(), filtro_api.getTipo(), filtro_api.getVersione(), Optional.of(erogatore));
-		search.setNomeServizio(uri);
+		
+		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null ) {
+			
+			if (StringUtils.isEmpty(filtro_api.getNome())) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare Nome Servizio");
+			}
+			
+			if (filtro_api.getVersione() == null) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare la Versione del Servizio");
+			}
+			
+			if (erogatore == null || isEmpty(erogatore)) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
+			}
+			
+			String uri = ReportisticaHelper.buildNomeServizioForOverride(filtro_api.getNome(), filtro_api.getTipo(), filtro_api.getVersione(), Optional.of(erogatore));
+			if (uri == null)
+				throw FaultCode.ERRORE_INTERNO.toException("Non sono riuscito a costruire la URI dell'Id Servizio");
+			
+			search.setNomeServizio(uri);			
+		}
 		search.setNomeAzione(azione);
 	}
 
