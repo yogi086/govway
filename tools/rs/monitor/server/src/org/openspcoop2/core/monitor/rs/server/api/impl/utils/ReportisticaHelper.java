@@ -686,7 +686,7 @@ public class ReportisticaHelper {
 		overrideOpzioniGenerazioneReport(body.getReport(), wrap, env);
 		switch (body.getTipo()) {
 		case EROGAZIONE:
-			overrideFiltroMittenteErogazione(deserializev2(body.getMittente(), FiltroMittenteErogazione.class), wrap, env);
+			overrideFiltroMittenteErogazione(deserializev2(body.getMittente(), FiltroMittenteErogazione.class), wrap, env);	// TODO BUG: Deve essere FiltroMittenteErogazioneDistribuzioneSoggettoRemoto !! 
 			overrideFiltroErogazione(body.getTag(), deserializev2(body.getApi(), FiltroErogazione.class), wrap,env);
 			break;
 		case FRUIZIONE:
