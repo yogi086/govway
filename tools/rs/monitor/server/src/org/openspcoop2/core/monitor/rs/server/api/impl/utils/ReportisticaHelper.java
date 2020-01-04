@@ -55,6 +55,7 @@ import org.openspcoop2.core.monitor.rs.server.model.FiltroEsito;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroFruizione;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteErogazione;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteErogazioneApplicativo;
+import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteErogazioneDistribuzioneSoggettoRemoto;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteErogazioneSoggetto;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteErogazioneTokenClaim;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizione;
@@ -272,7 +273,42 @@ public class ReportisticaHelper {
 			}
 			} // switch
 		}
-
+	}
+	
+	public static final void overrideFiltroMittenteErogazioneDistribuzioneSoggettoRemoto(FiltroMittenteErogazioneDistribuzioneSoggettoRemoto filtro, HttpRequestWrapper wrap,
+		MonitoraggioEnv env)
+	{
+		if (filtro == null)
+			return;
+		
+		wrap.overrideParameter(CostantiExporter.TIPO_RICERCA_MITTENTE, Enums.toTipoRicercaMittente(filtro.getTipo()));
+		
+		if (filtro.getId() != null) {
+			switch (filtro.getTipo()) {
+		
+			case IDENTIFICATIVO_AUTENTICATO: {
+				FiltroMittenteIdAutenticato fIdent = deserializeFiltroMittenteIdAutenticato(filtro.getId());
+				overrideFiltroMittenteIdApplicativo(fIdent, wrap, env);
+				break;
+			}
+			case TOKEN_INFO: {
+				FiltroMittenteErogazioneTokenClaim fClaim = deserializeFiltroMittenteErogazioneTokenClaim(filtro.getId());
+				wrap.overrideParameter(CostantiExporter.RICERCA_MITTENTE_TIPO_CLAIM, Enums.toTokenClaim.get(fClaim.getClaim()));
+				wrap.overrideParameter(CostantiExporter.IDENTIFICATIVO_RICERCA_MITTENTE, fClaim.getId());
+				wrap.overrideParameter(CostantiExporter.TIPO_RICERCA_MITTENTE_ESATTA, fClaim.isRicercaEsatta() + "");
+				wrap.overrideParameter(CostantiExporter.TIPO_RICERCA_MITTENTE_CASE_SENSITIVE, fClaim.isCaseSensitive() + "");
+				if (fClaim.getSoggetto() != null) {
+					wrap.overrideParameter(CostantiExporter.MITTENTE, new IDSoggetto(env.soggetto.getTipo(), fClaim.getSoggetto()).toString());
+				}
+				break;
+			}
+			case INDIRIZZO_IP: {
+				FiltroMittenteIndirizzoIP indirizzoIP = deserializeFiltroMittenteIndirizzoIP(filtro.getId());
+				overrideFiltroMittenteIndirizzoIP(indirizzoIP, wrap, env);
+				break;
+			}
+			} // switch
+		}
 	}
 	
 	public static final FiltroMittenteIdAutenticato deserializeFiltroMittenteIdAutenticato(Object o) {
@@ -481,8 +517,7 @@ public class ReportisticaHelper {
 			MonitoraggioEnv env) {
 		if (body == null) return;
 		
-		// TODO: Perhcè il tipo lo prendo dall'ambiente invece che dal filtroFruizione?
-		IDSoggetto erogatore = new IDSoggetto(env.soggetto.getTipo(), body.getErogatore());
+		IDSoggetto erogatore = new IDSoggetto(body.getTipo(), body.getErogatore());
 		
 		overrideFiltroApiBase(tag, body, erogatore, wrap, env);
 		// TODO: Forse fare l'override di destinatario intendendolo come l'erogatore non
@@ -704,7 +739,7 @@ public class ReportisticaHelper {
 		overrideOpzioniGenerazioneReport(body.getReport(), wrap, env);
 		switch (body.getTipo()) {
 		case EROGAZIONE:
-			overrideFiltroMittenteErogazione(deserializev2(body.getMittente(), FiltroMittenteErogazione.class), wrap, env);	// TODO BUG: Deve essere FiltroMittenteErogazioneDistribuzioneSoggettoRemoto !! 
+			overrideFiltroMittenteErogazioneDistribuzioneSoggettoRemoto(deserializev2(body.getMittente(), FiltroMittenteErogazioneDistribuzioneSoggettoRemoto.class), wrap, env); 
 			overrideFiltroErogazione(body.getTag(), deserializev2(body.getApi(), FiltroErogazione.class), wrap,env);
 			break;
 		case FRUIZIONE:

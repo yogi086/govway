@@ -23,7 +23,6 @@
 package org.openspcoop2.core.monitor.rs.server.api.impl.utils;
 
 
-import static org.openspcoop2.core.monitor.rs.server.api.impl.utils.TransazioniHelper.searchTransazioni;
 import static org.openspcoop2.utils.service.beans.utils.BaseHelper.deserializev2;
 
 import java.sql.Connection;
