@@ -21,11 +21,23 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
+import org.openspcoop2.utils.service.beans.FiltroRicercaId;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroTokenClaimBase;
+import org.openspcoop2.core.monitor.rs.server.model.TokenClaimEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class FiltroMittenteErogazioneTokenClaim extends FiltroTokenClaimBase {
@@ -48,7 +60,7 @@ public class FiltroMittenteErogazioneTokenClaim extends FiltroTokenClaimBase {
   @JsonProperty("ricerca_esatta")
   @Valid
   public Boolean isRicercaEsatta() {
-    return this.ricercaEsatta;
+    return ricercaEsatta;
   }
 
   public void setRicercaEsatta(Boolean ricercaEsatta) {
@@ -67,7 +79,7 @@ public class FiltroMittenteErogazioneTokenClaim extends FiltroTokenClaimBase {
   @JsonProperty("case_sensitive")
   @Valid
   public Boolean isCaseSensitive() {
-    return this.caseSensitive;
+    return caseSensitive;
   }
 
   public void setCaseSensitive(Boolean caseSensitive) {
@@ -87,7 +99,7 @@ public class FiltroMittenteErogazioneTokenClaim extends FiltroTokenClaimBase {
   @NotNull
   @Valid
   public String getId() {
-    return this.id;
+    return id;
   }
 
   public void setId(String id) {
@@ -106,7 +118,7 @@ public class FiltroMittenteErogazioneTokenClaim extends FiltroTokenClaimBase {
   @JsonProperty("soggetto")
   @Valid
  @Pattern(regexp="^[0-9A-Za-z]+$") @Size(max=255)  public String getSoggetto() {
-    return this.soggetto;
+    return soggetto;
   }
 
   public void setSoggetto(String soggetto) {
@@ -123,11 +135,11 @@ public class FiltroMittenteErogazioneTokenClaim extends FiltroTokenClaimBase {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroMittenteErogazioneTokenClaim {\n");
-    sb.append("    ").append(FiltroMittenteErogazioneTokenClaim.toIndentedString(super.toString())).append("\n");
-    sb.append("    ricercaEsatta: ").append(FiltroMittenteErogazioneTokenClaim.toIndentedString(this.ricercaEsatta)).append("\n");
-    sb.append("    caseSensitive: ").append(FiltroMittenteErogazioneTokenClaim.toIndentedString(this.caseSensitive)).append("\n");
-    sb.append("    id: ").append(FiltroMittenteErogazioneTokenClaim.toIndentedString(this.id)).append("\n");
-    sb.append("    soggetto: ").append(FiltroMittenteErogazioneTokenClaim.toIndentedString(this.soggetto)).append("\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    ricercaEsatta: ").append(toIndentedString(ricercaEsatta)).append("\n");
+    sb.append("    caseSensitive: ").append(toIndentedString(caseSensitive)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    soggetto: ").append(toIndentedString(soggetto)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -22,8 +22,21 @@
 package org.openspcoop2.core.monitor.rs.server.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.openspcoop2.core.monitor.rs.server.model.TipoFiltroMittenteErogazioneEnum;
+import org.openspcoop2.core.monitor.rs.server.model.TipoFiltroMittenteErogazioneSoggettoRemotoEnum;
+import javax.validation.constraints.*;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 /**
@@ -33,7 +46,7 @@ import javax.validation.Valid;
 public class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto  {
   
   @Schema(description = "")
-  private TipoFiltroMittenteErogazioneEnum tipo = null;
+  private TipoFiltroMittenteErogazioneSoggettoRemotoEnum tipo = null;
   
   @Schema(description = "")
   private Object id = null;
@@ -43,15 +56,15 @@ public class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto  {
   **/
   @JsonProperty("tipo")
   @Valid
-  public TipoFiltroMittenteErogazioneEnum getTipo() {
-    return this.tipo;
+  public TipoFiltroMittenteErogazioneSoggettoRemotoEnum getTipo() {
+    return tipo;
   }
 
-  public void setTipo(TipoFiltroMittenteErogazioneEnum tipo) {
+  public void setTipo(TipoFiltroMittenteErogazioneSoggettoRemotoEnum tipo) {
     this.tipo = tipo;
   }
 
-  public FiltroMittenteErogazioneDistribuzioneSoggettoRemoto tipo(TipoFiltroMittenteErogazioneEnum tipo) {
+  public FiltroMittenteErogazioneDistribuzioneSoggettoRemoto tipo(TipoFiltroMittenteErogazioneSoggettoRemotoEnum tipo) {
     this.tipo = tipo;
     return this;
   }
@@ -63,7 +76,7 @@ public class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto  {
   @JsonProperty("id")
   @Valid
   public Object getId() {
-    return this.id;
+    return id;
   }
 
   public void setId(Object id) {
@@ -81,8 +94,8 @@ public class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto {\n");
     
-    sb.append("    tipo: ").append(FiltroMittenteErogazioneDistribuzioneSoggettoRemoto.toIndentedString(this.tipo)).append("\n");
-    sb.append("    id: ").append(FiltroMittenteErogazioneDistribuzioneSoggettoRemoto.toIndentedString(this.id)).append("\n");
+    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

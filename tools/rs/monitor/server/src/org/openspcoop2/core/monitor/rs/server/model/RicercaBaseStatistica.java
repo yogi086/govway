@@ -27,7 +27,17 @@ import org.openspcoop2.core.monitor.rs.server.model.UnitaTempoReportEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class RicercaBaseStatistica  {
@@ -50,7 +60,7 @@ public class RicercaBaseStatistica  {
   @JsonProperty("unita_tempo")
   @Valid
   public UnitaTempoReportEnum getUnitaTempo() {
-    return this.unitaTempo;
+    return unitaTempo;
   }
 
   public void setUnitaTempo(UnitaTempoReportEnum unitaTempo) {
@@ -70,7 +80,7 @@ public class RicercaBaseStatistica  {
   @NotNull
   @Valid
   public FiltroTemporale getIntervalloTemporale() {
-    return this.intervalloTemporale;
+    return intervalloTemporale;
   }
 
   public void setIntervalloTemporale(FiltroTemporale intervalloTemporale) {
@@ -90,7 +100,7 @@ public class RicercaBaseStatistica  {
   @NotNull
   @Valid
   public FiltroRicercaRuoloTransazioneEnum getTipo() {
-    return this.tipo;
+    return tipo;
   }
 
   public void setTipo(FiltroRicercaRuoloTransazioneEnum tipo) {
@@ -109,7 +119,7 @@ public class RicercaBaseStatistica  {
   @JsonProperty("tag")
   @Valid
  @Pattern(regexp="^[_A-Za-z][\\-\\._A-Za-z0-9]*$") @Size(max=255)  public String getTag() {
-    return this.tag;
+    return tag;
   }
 
   public void setTag(String tag) {
@@ -127,10 +137,10 @@ public class RicercaBaseStatistica  {
     StringBuilder sb = new StringBuilder();
     sb.append("class RicercaBaseStatistica {\n");
     
-    sb.append("    unitaTempo: ").append(RicercaBaseStatistica.toIndentedString(this.unitaTempo)).append("\n");
-    sb.append("    intervalloTemporale: ").append(RicercaBaseStatistica.toIndentedString(this.intervalloTemporale)).append("\n");
-    sb.append("    tipo: ").append(RicercaBaseStatistica.toIndentedString(this.tipo)).append("\n");
-    sb.append("    tag: ").append(RicercaBaseStatistica.toIndentedString(this.tag)).append("\n");
+    sb.append("    unitaTempo: ").append(toIndentedString(unitaTempo)).append("\n");
+    sb.append("    intervalloTemporale: ").append(toIndentedString(intervalloTemporale)).append("\n");
+    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
+    sb.append("    tag: ").append(toIndentedString(tag)).append("\n");
     sb.append("}");
     return sb.toString();
   }

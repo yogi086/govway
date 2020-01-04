@@ -24,7 +24,17 @@ package org.openspcoop2.core.monitor.rs.server.model;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class InfoImplementazioneApi  {
@@ -65,7 +75,7 @@ public class InfoImplementazioneApi  {
   @JsonProperty("nome")
   @Valid
  @Pattern(regexp="^[_A-Za-z][\\-\\._A-Za-z0-9]*$") @Size(max=255)  public String getNome() {
-    return this.nome;
+    return nome;
   }
 
   public void setNome(String nome) {
@@ -84,7 +94,7 @@ public class InfoImplementazioneApi  {
   @JsonProperty("tipo")
   @Valid
  @Size(max=20)  public String getTipo() {
-    return this.tipo;
+    return tipo;
   }
 
   public void setTipo(String tipo) {
@@ -103,7 +113,7 @@ public class InfoImplementazioneApi  {
   @JsonProperty("versione")
   @Valid
   public Integer getVersione() {
-    return this.versione;
+    return versione;
   }
 
   public void setVersione(Integer versione) {
@@ -122,7 +132,7 @@ public class InfoImplementazioneApi  {
   @JsonProperty("soggetto")
   @Valid
  @Pattern(regexp="^[0-9A-Za-z]+$") @Size(max=255)  public String getSoggetto() {
-    return this.soggetto;
+    return soggetto;
   }
 
   public void setSoggetto(String soggetto) {
@@ -141,7 +151,7 @@ public class InfoImplementazioneApi  {
   @JsonProperty("azioni")
   @Valid
   public Integer getAzioni() {
-    return this.azioni;
+    return azioni;
   }
 
   public void setAzioni(Integer azioni) {
@@ -160,7 +170,7 @@ public class InfoImplementazioneApi  {
   @JsonProperty("erogazioni")
   @Valid
   public Integer getErogazioni() {
-    return this.erogazioni;
+    return erogazioni;
   }
 
   public void setErogazioni(Integer erogazioni) {
@@ -179,7 +189,7 @@ public class InfoImplementazioneApi  {
   @JsonProperty("fruizioni")
   @Valid
   public Integer getFruizioni() {
-    return this.fruizioni;
+    return fruizioni;
   }
 
   public void setFruizioni(Integer fruizioni) {
@@ -197,13 +207,13 @@ public class InfoImplementazioneApi  {
     StringBuilder sb = new StringBuilder();
     sb.append("class InfoImplementazioneApi {\n");
     
-    sb.append("    nome: ").append(InfoImplementazioneApi.toIndentedString(this.nome)).append("\n");
-    sb.append("    tipo: ").append(InfoImplementazioneApi.toIndentedString(this.tipo)).append("\n");
-    sb.append("    versione: ").append(InfoImplementazioneApi.toIndentedString(this.versione)).append("\n");
-    sb.append("    soggetto: ").append(InfoImplementazioneApi.toIndentedString(this.soggetto)).append("\n");
-    sb.append("    azioni: ").append(InfoImplementazioneApi.toIndentedString(this.azioni)).append("\n");
-    sb.append("    erogazioni: ").append(InfoImplementazioneApi.toIndentedString(this.erogazioni)).append("\n");
-    sb.append("    fruizioni: ").append(InfoImplementazioneApi.toIndentedString(this.fruizioni)).append("\n");
+    sb.append("    nome: ").append(toIndentedString(nome)).append("\n");
+    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
+    sb.append("    versione: ").append(toIndentedString(versione)).append("\n");
+    sb.append("    soggetto: ").append(toIndentedString(soggetto)).append("\n");
+    sb.append("    azioni: ").append(toIndentedString(azioni)).append("\n");
+    sb.append("    erogazioni: ").append(toIndentedString(erogazioni)).append("\n");
+    sb.append("    fruizioni: ").append(toIndentedString(fruizioni)).append("\n");
     sb.append("}");
     return sb.toString();
   }

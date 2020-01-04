@@ -21,8 +21,20 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
+import javax.validation.constraints.*;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class TempoMedioRispostaTipi  {
@@ -42,7 +54,7 @@ public class TempoMedioRispostaTipi  {
   @JsonProperty("latenza_totale")
   @Valid
   public Boolean isLatenzaTotale() {
-    return this.latenzaTotale;
+    return latenzaTotale;
   }
 
   public void setLatenzaTotale(Boolean latenzaTotale) {
@@ -61,7 +73,7 @@ public class TempoMedioRispostaTipi  {
   @JsonProperty("latenza_servizio")
   @Valid
   public Boolean isLatenzaServizio() {
-    return this.latenzaServizio;
+    return latenzaServizio;
   }
 
   public void setLatenzaServizio(Boolean latenzaServizio) {
@@ -80,7 +92,7 @@ public class TempoMedioRispostaTipi  {
   @JsonProperty("latenza_gateway")
   @Valid
   public Boolean isLatenzaGateway() {
-    return this.latenzaGateway;
+    return latenzaGateway;
   }
 
   public void setLatenzaGateway(Boolean latenzaGateway) {
@@ -98,9 +110,9 @@ public class TempoMedioRispostaTipi  {
     StringBuilder sb = new StringBuilder();
     sb.append("class TempoMedioRispostaTipi {\n");
     
-    sb.append("    latenzaTotale: ").append(TempoMedioRispostaTipi.toIndentedString(this.latenzaTotale)).append("\n");
-    sb.append("    latenzaServizio: ").append(TempoMedioRispostaTipi.toIndentedString(this.latenzaServizio)).append("\n");
-    sb.append("    latenzaGateway: ").append(TempoMedioRispostaTipi.toIndentedString(this.latenzaGateway)).append("\n");
+    sb.append("    latenzaTotale: ").append(toIndentedString(latenzaTotale)).append("\n");
+    sb.append("    latenzaServizio: ").append(toIndentedString(latenzaServizio)).append("\n");
+    sb.append("    latenzaGateway: ").append(toIndentedString(latenzaGateway)).append("\n");
     sb.append("}");
     return sb.toString();
   }

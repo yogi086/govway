@@ -26,7 +26,17 @@ import org.openspcoop2.core.monitor.rs.server.model.TipoReportEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class OpzioniGenerazioneReportBase  {
@@ -44,7 +54,7 @@ public class OpzioniGenerazioneReportBase  {
   @NotNull
   @Valid
   public FormatoReportEnum getFormato() {
-    return this.formato;
+    return formato;
   }
 
   public void setFormato(FormatoReportEnum formato) {
@@ -63,7 +73,7 @@ public class OpzioniGenerazioneReportBase  {
   @JsonProperty("tipo")
   @Valid
   public TipoReportEnum getTipo() {
-    return this.tipo;
+    return tipo;
   }
 
   public void setTipo(TipoReportEnum tipo) {
@@ -81,8 +91,8 @@ public class OpzioniGenerazioneReportBase  {
     StringBuilder sb = new StringBuilder();
     sb.append("class OpzioniGenerazioneReportBase {\n");
     
-    sb.append("    formato: ").append(OpzioniGenerazioneReportBase.toIndentedString(this.formato)).append("\n");
-    sb.append("    tipo: ").append(OpzioniGenerazioneReportBase.toIndentedString(this.tipo)).append("\n");
+    sb.append("    formato: ").append(toIndentedString(formato)).append("\n");
+    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
     sb.append("}");
     return sb.toString();
   }

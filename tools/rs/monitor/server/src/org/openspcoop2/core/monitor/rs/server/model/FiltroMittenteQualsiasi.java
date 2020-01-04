@@ -23,7 +23,20 @@ package org.openspcoop2.core.monitor.rs.server.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.openspcoop2.core.monitor.rs.server.model.TipoFiltroMittenteQualsiasiEnum;
+import javax.validation.constraints.*;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 /**
@@ -32,19 +45,20 @@ import javax.validation.Valid;
 @Schema(description="Descrive le informazioni di filtraggio relative al mittente per la ricerca di transazioni relative a fruizioni o erogazioni di servizio")
 public class FiltroMittenteQualsiasi  {
   
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   private TipoFiltroMittenteQualsiasiEnum tipo = null;
   
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   private Object id = null;
  /**
    * Get tipo
    * @return tipo
   **/
   @JsonProperty("tipo")
+  @NotNull
   @Valid
   public TipoFiltroMittenteQualsiasiEnum getTipo() {
-    return this.tipo;
+    return tipo;
   }
 
   public void setTipo(TipoFiltroMittenteQualsiasiEnum tipo) {
@@ -61,9 +75,10 @@ public class FiltroMittenteQualsiasi  {
    * @return id
   **/
   @JsonProperty("id")
+  @NotNull
   @Valid
   public Object getId() {
-    return this.id;
+    return id;
   }
 
   public void setId(Object id) {
@@ -81,8 +96,8 @@ public class FiltroMittenteQualsiasi  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroMittenteQualsiasi {\n");
     
-    sb.append("    tipo: ").append(FiltroMittenteQualsiasi.toIndentedString(this.tipo)).append("\n");
-    sb.append("    id: ").append(FiltroMittenteQualsiasi.toIndentedString(this.id)).append("\n");
+    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

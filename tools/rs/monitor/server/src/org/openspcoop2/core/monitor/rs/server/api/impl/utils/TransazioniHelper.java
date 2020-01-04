@@ -23,6 +23,7 @@
 package org.openspcoop2.core.monitor.rs.server.api.impl.utils;
 
 
+import static org.openspcoop2.core.monitor.rs.server.api.impl.utils.TransazioniHelper.searchTransazioni;
 import static org.openspcoop2.utils.service.beans.utils.BaseHelper.deserializev2;
 
 import java.sql.Connection;
@@ -46,11 +47,12 @@ import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteErogazioneToke
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizione;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizioneApplicativo;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizioneTokenClaim;
-import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIdApplicativo;
+import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIdAutenticato;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIndirizzoIP;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteQualsiasi;
 import org.openspcoop2.core.monitor.rs.server.model.ListaTransazioni;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaBaseTransazione;
+import org.openspcoop2.core.monitor.rs.server.model.RicercaIdApplicativo;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaIntervalloTemporale;
 import org.openspcoop2.generic_project.utils.ServiceManagerProperties;
 import org.openspcoop2.message.constants.ServiceBinding;
@@ -148,7 +150,7 @@ public class TransazioniHelper {
 		search.setRiconoscimento(tipoRiconoscimento);
 	}
 
-	public static final void overrideFiltroMittenteIdApplicativo(FiltroMittenteIdApplicativo filtro,
+	public static final void overrideFiltroMittenteIdApplicativo(FiltroMittenteIdAutenticato filtro,
 			TransazioniSearchForm search, MonitoraggioEnv env) {
 		if (filtro == null)
 			return;
@@ -249,7 +251,7 @@ public class TransazioniHelper {
 				break;
 			}
 			case IDENTIFICATIVO_AUTENTICATO: {
-				TransazioniHelper.overrideFiltroMittenteIdApplicativo(ReportisticaHelper.deserializeFiltroMittenteIdApplicativo(fMittente.getId()), search, env);
+				TransazioniHelper.overrideFiltroMittenteIdApplicativo(ReportisticaHelper.deserializeFiltroMittenteIdAutenticato(fMittente.getId()), search, env);
 				break;
 			}
 
@@ -287,7 +289,7 @@ public class TransazioniHelper {
 				break;
 			}
 			case IDENTIFICATIVO_AUTENTICATO: {
-				FiltroMittenteIdApplicativo fIdent = ReportisticaHelper.deserializeFiltroMittenteIdApplicativo(fMittente.getId());
+				FiltroMittenteIdAutenticato fIdent = ReportisticaHelper.deserializeFiltroMittenteIdAutenticato(fMittente.getId());
 				TransazioniHelper.overrideFiltroMittenteIdApplicativo(fIdent, search, env);
 				break;
 			}
@@ -327,7 +329,7 @@ public class TransazioniHelper {
 			switch (fMittente.getTipo()) {
 			
 			case IDENTIFICATIVO_AUTENTICATO: {
-				FiltroMittenteIdApplicativo fIdent = ReportisticaHelper.deserializeFiltroMittenteIdApplicativo(fMittente.getId());
+				FiltroMittenteIdAutenticato fIdent = ReportisticaHelper.deserializeFiltroMittenteIdAutenticato(fMittente.getId());
 				TransazioniHelper.overrideFiltroMittenteIdApplicativo(fIdent, search, env);
 				break;
 			}
@@ -405,5 +407,34 @@ public class TransazioniHelper {
 		} finally {
 			dbManager.releaseConnectionTracce(connection);
 		}
+	}
+	
+	
+	public static final ListaTransazioni findAllTransazioniByIdApplicativo(RicercaIdApplicativo body, MonitoraggioEnv env) throws Exception {
+		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
+		TransazioniSearchForm search = searchFormUtilities.getIdApplicativoSearchForm(env.context, env.profilo, env.soggetto.getNome(), 
+				body.getTipo(), body.getIntervalloTemporale().getDataInizio(), body.getIntervalloTemporale().getDataFine());
+		
+		TransazioniHelper.overrideRicercaBaseTransazione(body, search, env);
+
+		FiltroRicercaId filtro = body.getIdApplicativo();
+		search.setCorrelazioneApplicativaCaseSensitiveType((BooleanUtils.isTrue(filtro.isCaseSensitive()) ? CaseSensitiveMatch.SENSITIVE : CaseSensitiveMatch.INSENSITIVE).toString() );
+		search.setCorrelazioneApplicativaMatchingType((BooleanUtils.isTrue(filtro.isRicercaEsatta()) ? TipoMatch.EQUALS : TipoMatch.LIKE).toString());
+		search.setIdCorrelazioneApplicativa(filtro.getId());			
+		
+		ListaTransazioni ret = searchTransazioni(search, body.getOffset(), body.getLimit(), body.getSort(), env);
+		return ret;
+	}
+	
+	
+	public static final ListaTransazioni findAllTransazioni(RicercaIntervalloTemporale body, MonitoraggioEnv env) throws Exception {
+		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
+		TransazioniSearchForm search = searchFormUtilities.getAndamentoTemporaleSearchForm(env.context, env.profilo, env.soggetto.getNome(), 
+				body.getTipo(), body.getIntervalloTemporale().getDataInizio(), body.getIntervalloTemporale().getDataFine());
+		
+		TransazioniHelper.overrideRicercaBaseTransazione(body, search, env);
+		TransazioniHelper.overrideFiltroMittente(body, search, env);
+		
+		return searchTransazioni(search, body.getOffset(), body.getLimit(), body.getSort(), env);	
 	}
 }

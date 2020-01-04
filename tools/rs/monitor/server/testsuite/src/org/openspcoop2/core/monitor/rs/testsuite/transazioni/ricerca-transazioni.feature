@@ -272,7 +272,7 @@ Scenario: Ricerca per Filtro Indirizzo IP (X-Forwarded-For)
     Scenario: Test Not Found
     * def filtro = read('classpath:bodies/ricerca-filtro-api-erogazione.json')
     * eval filtro.intervallo_temporale = intervallo_temporale
-    * eval filtro.api.nome = "$$FiltroInesistente$$"
+    * eval filtro.api.nome = "FiltroApiInesistente"
 
     Given request filtro
     When method post
@@ -420,8 +420,8 @@ Scenario: RicercaSempliceTransazioni tramite richiesta GET con tag 'TESTSUITE'
 Scenario: Ricerca singola transazione per Id Messaggio (Risposta)
 
     * def filtro = read('classpath:bodies/ricerca-filtro-api-erogazione.json')
-    * eval filtro.api.nome = setup.erogazione_petstore.nome
-    * eval filtro.api.versione = setup.erogazione_petstore.versione
+    * eval filtro.api.nome = setup.erogazione_petstore.api_nome
+    * eval filtro.api.versione = setup.erogazione_petstore.api_versione
     * eval filtro.intervallo_temporale =  ({ data_inizio: setup.dataInizio, data_fine: setup.dataFine })
 
 
@@ -447,8 +447,8 @@ Scenario: Ricerca singola transazione per Id Messaggio (Risposta)
 Scenario: Ricerca per Id Transazione.
 
     * def filtro = read('classpath:bodies/ricerca-filtro-api-erogazione.json')
-    * eval filtro.api.nome = setup.erogazione_petstore.nome
-    * eval filtro.api.versione = setup.erogazione_petstore.versione
+    * eval filtro.api.nome = setup.erogazione_petstore.api_nome
+    * eval filtro.api.versione = setup.erogazione_petstore.api_versione
     * eval filtro.intervallo_temporale =  ({ data_inizio: setup.dataInizio, data_fine: setup.dataFine })
 
      # Viene fatta prima una ricerca lasca per recuperare una transazione qualsiasi

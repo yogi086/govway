@@ -21,6 +21,8 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
+import javax.validation.constraints.*;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -41,7 +43,7 @@ IDENTIFICATIVO_AUTENTICATO("identificativo_autenticato"),
   @Override
   @JsonValue
   public String toString() {
-    return String.valueOf(this.value);
+    return String.valueOf(value);
   }
 
   @JsonCreator

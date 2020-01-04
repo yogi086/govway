@@ -1781,6 +1781,9 @@ components:
           - $ref: "#/components/schemas/FiltroApiBase"
           - $ref: "#/components/schemas/FiltroFruizione"
     FiltroTemporale:
+      required:
+      - "data_fine"
+      - "data_inizio"
       type: "object"
       properties:
         data_inizio:
@@ -1790,6 +1793,9 @@ components:
           type: "string"
           format: "date-time"
     FiltroApiBase:
+      required:
+      - "nome"
+      - "versione"
       type: "object"
       properties:
         tipo:
@@ -1802,7 +1808,9 @@ components:
       type: "object"
       allOf:
       - $ref: "#/components/schemas/FiltroApiBase"
-      - type: "object"
+      - required:
+        - "erogatore"
+        type: "object"
         properties:
           erogatore:
             $ref: "#/components/schemas/SimpleName"
@@ -1815,6 +1823,8 @@ components:
       allOf:
       - $ref: "#/components/schemas/FiltroApiBase"
     FiltroEsito:
+      required:
+      - "tipo"
       type: "object"
       properties:
         tipo:
@@ -1852,7 +1862,7 @@ components:
               indirizzo_ip: "#/components/schemas/FiltroMittenteIndirizzoIP"
           oneOf:
           - $ref: "#/components/schemas/FiltroMittenteFruizioneApplicativo"
-          - $ref: "#/components/schemas/FiltroMittenteIdApplicativo"
+          - $ref: "#/components/schemas/FiltroMittenteIdAutenticato"
           - $ref: "#/components/schemas/FiltroMittenteFruizioneTokenClaim"
           - $ref: "#/components/schemas/FiltroMittenteIndirizzoIP"
       description: "Descrive le informazioni di filtraggio relative al mittente per\
@@ -1874,12 +1884,15 @@ components:
           oneOf:
           - $ref: "#/components/schemas/FiltroMittenteErogazioneSoggetto"
           - $ref: "#/components/schemas/FiltroMittenteErogazioneApplicativo"
-          - $ref: "#/components/schemas/FiltroMittenteIdApplicativo"
+          - $ref: "#/components/schemas/FiltroMittenteIdAutenticato"
           - $ref: "#/components/schemas/FiltroMittenteErogazioneTokenClaim"
           - $ref: "#/components/schemas/FiltroMittenteIndirizzoIP"
       description: "Descrive le informazioni di filtraggio relative al mittente per\
         \ la ricerca di transazioni relative ad erogazioni di servizio"
     FiltroMittenteQualsiasi:
+      required:
+      - "id"
+      - "tipo"
       type: "object"
       properties:
         tipo:
@@ -1892,7 +1905,7 @@ components:
               token_info: "#/components/schemas/FiltroMittenteFruizioneTokenClaim"
               indirizzo_ip: "#/components/schemas/FiltroMittenteIndirizzoIP"
           oneOf:
-          - $ref: "#/components/schemas/FiltroMittenteIdApplicativo"
+          - $ref: "#/components/schemas/FiltroMittenteIdAutenticato"
           - $ref: "#/components/schemas/FiltroMittenteFruizioneTokenClaim"
           - $ref: "#/components/schemas/FiltroMittenteIndirizzoIP"
       description: "Descrive le informazioni di filtraggio relative al mittente per\
@@ -1901,7 +1914,7 @@ components:
       type: "object"
       properties:
         tipo:
-          $ref: "#/components/schemas/TipoFiltroMittenteErogazioneEnum"
+          $ref: "#/components/schemas/TipoFiltroMittenteErogazioneSoggettoRemotoEnum"
         id:
           discriminator:
             propertyName: "tipo"
@@ -1910,7 +1923,7 @@ components:
               token_info: "#/components/schemas/FiltroMittenteErogazioneTokenClaim"
               indirizzo_ip: "#/components/schemas/FiltroMittenteIndirizzoIP"
           oneOf:
-          - $ref: "#/components/schemas/FiltroMittenteIdApplicativo"
+          - $ref: "#/components/schemas/FiltroMittenteIdAutenticato"
           - $ref: "#/components/schemas/FiltroMittenteErogazioneTokenClaim"
           - $ref: "#/components/schemas/FiltroMittenteIndirizzoIP"
       description: "Descrive le informazioni di filtraggio relative al mittente per\
@@ -1939,7 +1952,7 @@ components:
       properties:
         applicativo:
           $ref: "#/components/schemas/NCName"
-    FiltroMittenteIdApplicativo:
+    FiltroMittenteIdAutenticato:
       type: "object"
       allOf:
       - $ref: "#/components/schemas/FiltroRicercaId"
@@ -2008,6 +2021,12 @@ components:
       - "identificativo_autenticato"
       - "token_info"
       - "indirizzo_ip"
+    TipoFiltroMittenteErogazioneSoggettoRemotoEnum:
+      type: "string"
+      enum:
+      - "identificativo_autenticato"
+      - "token_info"
+      - "indirizzo_ip"
     TipoFiltroMittenteQualsiasiEnum:
       type: "string"
       enum:
@@ -2034,12 +2053,12 @@ components:
     TipoReportEnum:
       type: "string"
       example: "Line"
+      default: "table"
       enum:
       - "line"
       - "pie"
       - "bar"
       - "table"
-      default: "table"
     FormatoReportEnum:
       type: "string"
       example: "csv"
@@ -2052,36 +2071,36 @@ components:
     UnitaTempoReportEnum:
       type: "string"
       example: "orario"
+      default: "giornaliero"
       enum:
       - "orario"
       - "giornaliero"
       - "settimanale"
       - "mensile"
-      default: "giornaliero"
     TipoInformazioneReportEnum:
       type: "string"
       example: "numero_transazioni"
+      default: "numero_transazioni"
       enum:
       - "numero_transazioni"
       - "occupazione_banda"
       - "tempo_medio_risposta"
-      default: "numero_transazioni"
     OccupazioneBandaEnum:
       type: "string"
       example: "banda_complessiva"
+      default: "banda_complessiva"
       enum:
       - "banda_complessiva"
       - "banda_interna"
       - "banda_esterna"
-      default: "banda_complessiva"
     TempoMedioRispostaEnum:
       type: "string"
       example: "latenza_totale"
+      default: "latenza_totale"
       enum:
       - "latenza_totale"
       - "latenza_servizio"
       - "latenza_gateway"
-      default: "latenza_totale"
     TransazioneExt:
       type: "object"
       allOf:
@@ -2478,12 +2497,13 @@ components:
           example: "abc123"
     ProfiloEnum:
       type: "string"
+      default: "APIGateway"
       enum:
       - "APIGateway"
+      - "ModIPA"
       - "SPCoop"
       - "FatturaPA"
       - "eDelivery"
-      default: "APIGateway"
     ProfiloCollaborazioneEnum:
       type: "string"
       example: "sincrono"
@@ -3027,7 +3047,7 @@ components:
       name: "profilo"
       in: "query"
       description: "Indica la modalità operativa del Gateway, a scelta tra:\n  * APIGateway;\n\
-        \  * SPCoop;\n  * FatturaPA;\n  * eDelivery."
+        \  * ModIPA;\n  * SPCoop;\n  * FatturaPA;\n  * eDelivery."
       required: false
       schema:
         $ref: "#/components/schemas/ProfiloEnum"

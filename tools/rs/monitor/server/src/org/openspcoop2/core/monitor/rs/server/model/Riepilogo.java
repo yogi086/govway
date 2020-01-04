@@ -24,7 +24,17 @@ package org.openspcoop2.core.monitor.rs.server.model;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class Riepilogo  {
@@ -66,7 +76,7 @@ public class Riepilogo  {
   @NotNull
   @Valid
   public Integer getApi() {
-    return this.api;
+    return api;
   }
 
   public void setApi(Integer api) {
@@ -85,7 +95,7 @@ public class Riepilogo  {
   @JsonProperty("soggetto")
   @Valid
  @Pattern(regexp="^[0-9A-Za-z]+$") @Size(max=255)  public String getSoggetto() {
-    return this.soggetto;
+    return soggetto;
   }
 
   public void setSoggetto(String soggetto) {
@@ -105,7 +115,7 @@ public class Riepilogo  {
   @NotNull
   @Valid
   public Integer getErogazioni() {
-    return this.erogazioni;
+    return erogazioni;
   }
 
   public void setErogazioni(Integer erogazioni) {
@@ -125,7 +135,7 @@ public class Riepilogo  {
   @NotNull
   @Valid
   public Integer getFruizioni() {
-    return this.fruizioni;
+    return fruizioni;
   }
 
   public void setFruizioni(Integer fruizioni) {
@@ -145,7 +155,7 @@ public class Riepilogo  {
   @NotNull
   @Valid
   public Integer getSoggettiDominioInterno() {
-    return this.soggettiDominioInterno;
+    return soggettiDominioInterno;
   }
 
   public void setSoggettiDominioInterno(Integer soggettiDominioInterno) {
@@ -165,7 +175,7 @@ public class Riepilogo  {
   @NotNull
   @Valid
   public Integer getSoggettiDominioEsterno() {
-    return this.soggettiDominioEsterno;
+    return soggettiDominioEsterno;
   }
 
   public void setSoggettiDominioEsterno(Integer soggettiDominioEsterno) {
@@ -185,7 +195,7 @@ public class Riepilogo  {
   @NotNull
   @Valid
   public Integer getApplicativi() {
-    return this.applicativi;
+    return applicativi;
   }
 
   public void setApplicativi(Integer applicativi) {
@@ -203,13 +213,13 @@ public class Riepilogo  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Riepilogo {\n");
     
-    sb.append("    api: ").append(Riepilogo.toIndentedString(this.api)).append("\n");
-    sb.append("    soggetto: ").append(Riepilogo.toIndentedString(this.soggetto)).append("\n");
-    sb.append("    erogazioni: ").append(Riepilogo.toIndentedString(this.erogazioni)).append("\n");
-    sb.append("    fruizioni: ").append(Riepilogo.toIndentedString(this.fruizioni)).append("\n");
-    sb.append("    soggettiDominioInterno: ").append(Riepilogo.toIndentedString(this.soggettiDominioInterno)).append("\n");
-    sb.append("    soggettiDominioEsterno: ").append(Riepilogo.toIndentedString(this.soggettiDominioEsterno)).append("\n");
-    sb.append("    applicativi: ").append(Riepilogo.toIndentedString(this.applicativi)).append("\n");
+    sb.append("    api: ").append(toIndentedString(api)).append("\n");
+    sb.append("    soggetto: ").append(toIndentedString(soggetto)).append("\n");
+    sb.append("    erogazioni: ").append(toIndentedString(erogazioni)).append("\n");
+    sb.append("    fruizioni: ").append(toIndentedString(fruizioni)).append("\n");
+    sb.append("    soggettiDominioInterno: ").append(toIndentedString(soggettiDominioInterno)).append("\n");
+    sb.append("    soggettiDominioEsterno: ").append(toIndentedString(soggettiDominioEsterno)).append("\n");
+    sb.append("    applicativi: ").append(toIndentedString(applicativi)).append("\n");
     sb.append("}");
     return sb.toString();
   }

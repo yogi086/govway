@@ -27,15 +27,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets TipoMessaggioEnum
+ * Gets or Sets TipoFiltroMittenteErogazioneSoggettoRemotoEnum
  */
-public enum TipoMessaggioEnum {
-RICHIESTA("richiesta"),
-  RISPOSTA("risposta");
+public enum TipoFiltroMittenteErogazioneSoggettoRemotoEnum {
+IDENTIFICATIVO_AUTENTICATO("identificativo_autenticato"),
+  TOKEN_INFO("token_info"),
+  INDIRIZZO_IP("indirizzo_ip");
 
   private String value;
 
-  TipoMessaggioEnum(String value) {
+  TipoFiltroMittenteErogazioneSoggettoRemotoEnum(String value) {
     this.value = value;
   }
 
@@ -46,8 +47,8 @@ RICHIESTA("richiesta"),
   }
 
   @JsonCreator
-  public static TipoMessaggioEnum fromValue(String text) {
-    for (TipoMessaggioEnum b : TipoMessaggioEnum.values()) {
+  public static TipoFiltroMittenteErogazioneSoggettoRemotoEnum fromValue(String text) {
+    for (TipoFiltroMittenteErogazioneSoggettoRemotoEnum b : TipoFiltroMittenteErogazioneSoggettoRemotoEnum.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }

@@ -21,10 +21,24 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
+import org.openspcoop2.core.monitor.rs.server.model.FormatoReportEnum;
 import org.openspcoop2.core.monitor.rs.server.model.OpzioniGenerazioneReportBase;
 import org.openspcoop2.core.monitor.rs.server.model.TipoInformazioneReport;
+import org.openspcoop2.core.monitor.rs.server.model.TipoReportEnum;
+import javax.validation.constraints.*;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class OpzioniGenerazioneReport extends OpzioniGenerazioneReportBase {
@@ -38,7 +52,7 @@ public class OpzioniGenerazioneReport extends OpzioniGenerazioneReportBase {
   @JsonProperty("tipo_informazione")
   @Valid
   public TipoInformazioneReport getTipoInformazione() {
-    return this.tipoInformazione;
+    return tipoInformazione;
   }
 
   public void setTipoInformazione(TipoInformazioneReport tipoInformazione) {
@@ -55,8 +69,8 @@ public class OpzioniGenerazioneReport extends OpzioniGenerazioneReportBase {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OpzioniGenerazioneReport {\n");
-    sb.append("    ").append(OpzioniGenerazioneReport.toIndentedString(super.toString())).append("\n");
-    sb.append("    tipoInformazione: ").append(OpzioniGenerazioneReport.toIndentedString(this.tipoInformazione)).append("\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    tipoInformazione: ").append(toIndentedString(tipoInformazione)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -45,10 +45,19 @@ import org.openspcoop2.core.monitor.rs.server.model.TokenClaimEnum;
 import org.openspcoop2.utils.service.beans.TransazioneRuoloEnum;
 import org.openspcoop2.core.monitor.rs.server.model.UnitaTempoReportEnum;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.MediaType;
+import org.apache.cxf.jaxrs.ext.multipart.*;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.*;

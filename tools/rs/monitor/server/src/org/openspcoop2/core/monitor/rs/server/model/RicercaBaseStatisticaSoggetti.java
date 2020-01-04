@@ -21,9 +21,24 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
+import org.openspcoop2.core.monitor.rs.server.model.FiltroRicercaRuoloTransazioneEnum;
+import org.openspcoop2.core.monitor.rs.server.model.FiltroTemporale;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaBaseStatistica;
+import org.openspcoop2.core.monitor.rs.server.model.UnitaTempoReportEnum;
+import javax.validation.constraints.*;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class RicercaBaseStatisticaSoggetti extends RicercaBaseStatistica {
@@ -37,7 +52,7 @@ public class RicercaBaseStatisticaSoggetti extends RicercaBaseStatistica {
   @JsonProperty("api")
   @Valid
   public Object getApi() {
-    return this.api;
+    return api;
   }
 
   public void setApi(Object api) {
@@ -54,8 +69,8 @@ public class RicercaBaseStatisticaSoggetti extends RicercaBaseStatistica {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class RicercaBaseStatisticaSoggetti {\n");
-    sb.append("    ").append(RicercaBaseStatisticaSoggetti.toIndentedString(super.toString())).append("\n");
-    sb.append("    api: ").append(RicercaBaseStatisticaSoggetti.toIndentedString(this.api)).append("\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    api: ").append(toIndentedString(api)).append("\n");
     sb.append("}");
     return sb.toString();
   }

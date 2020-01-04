@@ -32,8 +32,20 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.validation.Configuration;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.cxf.jaxrs.validation.JAXRSParameterNameProvider;
+import org.apache.cxf.validation.BeanValidationProvider;
+import org.apache.cxf.validation.ValidationConfiguration;
 import org.openspcoop2.core.id.IDSoggetto;
 import org.openspcoop2.core.monitor.rs.server.config.DBManager;
 import org.openspcoop2.core.monitor.rs.server.config.LoggerProperties;
@@ -48,11 +60,12 @@ import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteErogazioneToke
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizione;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizioneApplicativo;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizioneTokenClaim;
-import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIdApplicativo;
+import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIdAutenticato;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIndirizzoIP;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteQualsiasi;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroQualsiasi;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroRicercaRuoloTransazioneEnum;
+import org.openspcoop2.core.monitor.rs.server.model.FormatoReportEnum;
 import org.openspcoop2.core.monitor.rs.server.model.OccupazioneBandaEnum;
 import org.openspcoop2.core.monitor.rs.server.model.OccupazioneBandaTipi;
 import org.openspcoop2.core.monitor.rs.server.model.OpzioniGenerazioneReport;
@@ -60,6 +73,7 @@ import org.openspcoop2.core.monitor.rs.server.model.OpzioniGenerazioneReportBase
 import org.openspcoop2.core.monitor.rs.server.model.OpzioniGenerazioneReportMultiLine;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaBaseStatistica;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaBaseStatisticaSoggetti;
+import org.openspcoop2.core.monitor.rs.server.model.RicercaConfigurazioneApi;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaStatisticaAndamentoTemporale;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaStatisticaDistribuzioneApi;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaStatisticaDistribuzioneApplicativo;
@@ -78,7 +92,10 @@ import org.openspcoop2.protocol.sdk.config.IProtocolConfiguration;
 import org.openspcoop2.utils.Utilities;
 import org.openspcoop2.utils.service.context.IContext;
 import org.openspcoop2.utils.service.fault.jaxrs.FaultCode;
+import org.openspcoop2.utils.service.fault.jaxrs.ProblemValidation;
+import org.openspcoop2.utils.transport.http.HttpConstants;
 import org.openspcoop2.web.monitor.statistiche.constants.CostantiExporter;
+import org.openspcoop2.web.monitor.statistiche.dao.ConfigurazioniGeneraliService;
 import org.openspcoop2.web.monitor.statistiche.dao.StatisticheGiornaliereService;
 
 
@@ -150,7 +167,7 @@ public class ReportisticaHelper {
 		}
 	}
 
-	public static final void overrideFiltroMittenteIdApplicativo(FiltroMittenteIdApplicativo filtro,
+	public static final void overrideFiltroMittenteIdApplicativo(FiltroMittenteIdAutenticato filtro,
 			HttpRequestWrapper wrap, MonitoraggioEnv env) {
 		if (filtro == null)
 			return;
@@ -228,7 +245,7 @@ public class ReportisticaHelper {
 				break;
 			}
 			case IDENTIFICATIVO_AUTENTICATO: {
-				FiltroMittenteIdApplicativo fIdent = deserializeFiltroMittenteIdApplicativo(filtro.getId());
+				FiltroMittenteIdAutenticato fIdent = deserializeFiltroMittenteIdAutenticato(filtro.getId());
 				overrideFiltroMittenteIdApplicativo(fIdent, wrap, env);
 				break;
 			}
@@ -258,10 +275,10 @@ public class ReportisticaHelper {
 
 	}
 	
-	public static final FiltroMittenteIdApplicativo deserializeFiltroMittenteIdApplicativo(Object o) {
-		FiltroMittenteIdApplicativo ret = deserializeDefault(o, FiltroMittenteIdApplicativo.class);
+	public static final FiltroMittenteIdAutenticato deserializeFiltroMittenteIdAutenticato(Object o) {
+		FiltroMittenteIdAutenticato ret = deserializeDefault(o, FiltroMittenteIdAutenticato.class);
 		if (ret.getAutenticazione() == null || StringUtils.isEmpty(ret.getId()))
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException(FiltroMittenteIdApplicativo.class.getName() + ": Indicare i campi obbligatori 'autenticazione' e 'id'");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException(FiltroMittenteIdAutenticato.class.getName() + ": Indicare i campi obbligatori 'autenticazione' e 'id'");
 
 		return ret;
 	}
@@ -269,7 +286,7 @@ public class ReportisticaHelper {
 	public static final FiltroMittenteIndirizzoIP deserializeFiltroMittenteIndirizzoIP(Object o) {
 		FiltroMittenteIndirizzoIP ret = deserializeDefault(o, FiltroMittenteIndirizzoIP.class);
 		if (StringUtils.isEmpty(ret.getId()))
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException(FiltroMittenteIdApplicativo.class.getName() + ": Indicare il campo obbligatorio 'id'");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException(FiltroMittenteIndirizzoIP.class.getName() + ": Indicare il campo obbligatorio 'id'");
 
 		return ret;
 	}
@@ -306,7 +323,7 @@ public class ReportisticaHelper {
 			break;
 		}
 		case IDENTIFICATIVO_AUTENTICATO: {
-			FiltroMittenteIdApplicativo fIdent = deserializeFiltroMittenteIdApplicativo(filtro.getId());
+			FiltroMittenteIdAutenticato fIdent = deserializeFiltroMittenteIdAutenticato(filtro.getId());
 			overrideFiltroMittenteIdApplicativo(fIdent, wrap, env);
 			break;
 		}
@@ -336,7 +353,7 @@ public class ReportisticaHelper {
 		wrap.overrideParameter(CostantiExporter.TIPO_RICERCA_MITTENTE, Enums.toTipoRicercaMittente(filtro.getTipo()));
 		switch (filtro.getTipo()) {
 		case IDENTIFICATIVO_AUTENTICATO: {
-			FiltroMittenteIdApplicativo fIdent = deserializeFiltroMittenteIdApplicativo(filtro.getId());
+			FiltroMittenteIdAutenticato fIdent = deserializeFiltroMittenteIdAutenticato(filtro.getId());
 			overrideFiltroMittenteIdApplicativo(fIdent, wrap, env);
 			break;
 		}
@@ -464,6 +481,7 @@ public class ReportisticaHelper {
 			MonitoraggioEnv env) {
 		if (body == null) return;
 		
+		// TODO: Perhcè il tipo lo prendo dall'ambiente invece che dal filtroFruizione?
 		IDSoggetto erogatore = new IDSoggetto(env.soggetto.getTipo(), body.getErogatore());
 		
 		overrideFiltroApiBase(tag, body, erogatore, wrap, env);
@@ -826,37 +844,75 @@ public class ReportisticaHelper {
 		return filtroApi;
 	}
 
-	/*
-	 * public static final <T> Map<String,Object> objectToMap(T object, Class<T>
-	 * type) throws IllegalAccessException, InvocationTargetException,
-	 * NoSuchMethodException { PropertyDescriptor[] descriptors =
-	 * PropertyUtils.getPropertyDescriptors(object);
-	 * 
-	 * 
-	 * //Field[] field = LinkedHashMap<String, Object> ret = new LinkedHashMap<>();
-	 * for (Field field : type.getDeclaredFields() ) { field.setAccessible(true);
-	 * 
-	 * Class<?> source = field.getDeclaringClass(); if ( source == String.class ||
-	 * source == Integer.class || source == Boolean.class || source == boolean.class
-	 * || source == Integer.class ) { ret.put(field.getName(),
-	 * BeanUtils.getProperty(object, field.getName())); // TODO: Trasformare in
-	 * jsoncase il secondo field.getName() }
-	 * 
-	 * if ( source.isEnum() ) { ret.put(field.getName(),
-	 * BeanUtils.getProperty(object, field.getName()).toString()); // TODO:
-	 * Trasformare in jsoncase il secondo field.getName() }
-	 * 
-	 * if ( source == (new byte[0]).getClass() ) { ret.put(field.getName(),
-	 * BeanUtils.getProperty(object, field.getName()).toString()); // TODO:
-	 * Trasformare in jsoncase il secondo field.getName() byte[] v =
-	 * BeanUtils.getProperty(object, field.getName()); }
-	 * 
-	 * 
-	 * }
-	 * 
-	 * return ret;
-	 * 
-	 * }
-	 */
+	public static final byte[] exportConfigurazioneApi(RicercaConfigurazioneApi body, MonitoraggioEnv env) {
+		DBManager dbManager = DBManager.getInstance();
+		Connection connection = null;
+		ConfigurazioniGeneraliService configurazioniService = null;
+		SearchFormUtilities searchFormUtilities = null;
+		HttpRequestWrapper request = null;
+				
+		try {
+			connection = dbManager.getConnectionConfig();
+			ServiceManagerProperties smp = dbManager.getServiceManagerPropertiesConfig();
+			configurazioniService = new ConfigurazioniGeneraliService(connection, true, smp, LoggerProperties.getLoggerDAO());
+			searchFormUtilities = new SearchFormUtilities();
+			request = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo, env.soggetto.getNome(),
+					body.getTipo(), FormatoReportEnum.CSV, TipoReport.api);
+		}
+		catch (Exception e) {
+			dbManager.releaseConnectionConfig(connection);
+			throw new RuntimeException(e);
+		}
+		
+		String tag = null;
+		switch (body.getTipo()) {
+			case EROGAZIONE: {
+				/*FiltroErogazione ero = deserializev2(body.getApi(), FiltroErogazione.class);
+				
+				JAXRSParameterNameProvider parameterNameProvider = new JAXRSParameterNameProvider();
+	            Configuration<?> factoryCfg = Validation.byDefaultProvider().configure();
+	            ValidationConfiguration cfg = new ValidationConfiguration(parameterNameProvider);
+	            if (cfg != null) {
+	                factoryCfg.parameterNameProvider(cfg.getParameterNameProvider());
+	                factoryCfg.messageInterpolator(cfg.getMessageInterpolator());
+	                factoryCfg.traversableResolver(cfg.getTraversableResolver());
+	                factoryCfg.constraintValidatorFactory(cfg.getConstraintValidatorFactory());
+	                for (Map.Entry<String, String> entry : cfg.getProperties().entrySet()) {
+	                    factoryCfg.addProperty(entry.getKey(), entry.getValue());
+	                }
+	            }
 
+				ValidatorFactory factory = factoryCfg.buildValidatorFactory();
+				Validator validator = factory.getValidator();
+				Set<ConstraintViolation<FiltroErogazione>> violations = validator.validate(ero);
+				
+				if (!violations.isEmpty()) {
+	            	ProblemValidation problem = new ProblemValidation(FaultCode.RICHIESTA_NON_VALIDA.toFault());
+					
+					for (ConstraintViolation<FiltroErogazione> violation : violations) {
+						String msg = FiltroErogazione.class.getSimpleName() + "." + violation.getPropertyPath(); 
+						problem.addInvalidParam(msg, violation.getMessage(), null);
+					}
+					
+					throw FaultCode.RICHIESTA_NON_VALIDA.toException(Response.status(problem.getStatus()).entity(problem).type(HttpConstants.CONTENT_TYPE_JSON_PROBLEM_DETAILS_RFC_7807).build());
+				}*/
+				
+				
+				ReportisticaHelper.overrideFiltroErogazione(tag, deserializev2(body.getApi(), FiltroErogazione.class), request, env);
+				break;
+			}
+			case FRUIZIONE:
+				ReportisticaHelper.overrideFiltroFruizione(tag, deserializev2(body.getApi(), FiltroFruizione.class), request, env);
+				break;
+		}
+
+		try {
+			byte[] report = StatsGenerator.generateReport(request, env.context, configurazioniService);
+			return report;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} finally {
+			dbManager.releaseConnectionConfig(connection);
+		}
+	}
 }

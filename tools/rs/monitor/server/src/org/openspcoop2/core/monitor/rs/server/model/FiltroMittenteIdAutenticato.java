@@ -26,10 +26,20 @@ import org.openspcoop2.core.monitor.rs.server.model.TipoFiltroMittenteIdentifica
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
-public class FiltroMittenteIdApplicativo extends FiltroRicercaId {
+public class FiltroMittenteIdAutenticato extends FiltroRicercaId {
   
   @Schema(required = true, description = "")
   private TipoFiltroMittenteIdentificativoAutenticatoEnum autenticazione = null;
@@ -41,14 +51,14 @@ public class FiltroMittenteIdApplicativo extends FiltroRicercaId {
   @NotNull
   @Valid
   public TipoFiltroMittenteIdentificativoAutenticatoEnum getAutenticazione() {
-    return this.autenticazione;
+    return autenticazione;
   }
 
   public void setAutenticazione(TipoFiltroMittenteIdentificativoAutenticatoEnum autenticazione) {
     this.autenticazione = autenticazione;
   }
 
-  public FiltroMittenteIdApplicativo autenticazione(TipoFiltroMittenteIdentificativoAutenticatoEnum autenticazione) {
+  public FiltroMittenteIdAutenticato autenticazione(TipoFiltroMittenteIdentificativoAutenticatoEnum autenticazione) {
     this.autenticazione = autenticazione;
     return this;
   }
@@ -57,9 +67,9 @@ public class FiltroMittenteIdApplicativo extends FiltroRicercaId {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class FiltroMittenteIdApplicativo {\n");
-    sb.append("    ").append(FiltroMittenteIdApplicativo.toIndentedString(super.toString())).append("\n");
-    sb.append("    autenticazione: ").append(FiltroMittenteIdApplicativo.toIndentedString(this.autenticazione)).append("\n");
+    sb.append("class FiltroMittenteIdAutenticato {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    autenticazione: ").append(toIndentedString(autenticazione)).append("\n");
     sb.append("}");
     return sb.toString();
   }

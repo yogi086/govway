@@ -23,8 +23,20 @@ package org.openspcoop2.core.monitor.rs.server.model;
 
 import org.joda.time.DateTime;
 import org.openspcoop2.utils.service.beans.DiagnosticoSeveritaEnum;
+import javax.validation.constraints.*;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.validation.Valid;
 
 public class Evento  {
@@ -53,7 +65,7 @@ public class Evento  {
   @JsonProperty("id")
   @Valid
   public Long getId() {
-    return this.id;
+    return id;
   }
 
   public void setId(Long id) {
@@ -72,7 +84,7 @@ public class Evento  {
   @JsonProperty("ora_registrazione")
   @Valid
   public DateTime getOraRegistrazione() {
-    return this.oraRegistrazione;
+    return oraRegistrazione;
   }
 
   public void setOraRegistrazione(DateTime oraRegistrazione) {
@@ -91,7 +103,7 @@ public class Evento  {
   @JsonProperty("severita")
   @Valid
   public DiagnosticoSeveritaEnum getSeverita() {
-    return this.severita;
+    return severita;
   }
 
   public void setSeverita(DiagnosticoSeveritaEnum severita) {
@@ -110,7 +122,7 @@ public class Evento  {
   @JsonProperty("tipo")
   @Valid
   public String getTipo() {
-    return this.tipo;
+    return tipo;
   }
 
   public void setTipo(String tipo) {
@@ -129,7 +141,7 @@ public class Evento  {
   @JsonProperty("codice")
   @Valid
   public String getCodice() {
-    return this.codice;
+    return codice;
   }
 
   public void setCodice(String codice) {
@@ -148,7 +160,7 @@ public class Evento  {
   @JsonProperty("origine")
   @Valid
   public String getOrigine() {
-    return this.origine;
+    return origine;
   }
 
   public void setOrigine(String origine) {
@@ -166,12 +178,12 @@ public class Evento  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Evento {\n");
     
-    sb.append("    id: ").append(Evento.toIndentedString(this.id)).append("\n");
-    sb.append("    oraRegistrazione: ").append(Evento.toIndentedString(this.oraRegistrazione)).append("\n");
-    sb.append("    severita: ").append(Evento.toIndentedString(this.severita)).append("\n");
-    sb.append("    tipo: ").append(Evento.toIndentedString(this.tipo)).append("\n");
-    sb.append("    codice: ").append(Evento.toIndentedString(this.codice)).append("\n");
-    sb.append("    origine: ").append(Evento.toIndentedString(this.origine)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    oraRegistrazione: ").append(toIndentedString(oraRegistrazione)).append("\n");
+    sb.append("    severita: ").append(toIndentedString(severita)).append("\n");
+    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
+    sb.append("    codice: ").append(toIndentedString(codice)).append("\n");
+    sb.append("    origine: ").append(toIndentedString(origine)).append("\n");
     sb.append("}");
     return sb.toString();
   }
