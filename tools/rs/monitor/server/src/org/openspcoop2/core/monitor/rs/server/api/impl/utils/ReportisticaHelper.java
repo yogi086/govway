@@ -32,20 +32,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-
-import javax.validation.Configuration;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.cxf.jaxrs.validation.JAXRSParameterNameProvider;
-import org.apache.cxf.validation.BeanValidationProvider;
-import org.apache.cxf.validation.ValidationConfiguration;
 import org.openspcoop2.core.id.IDSoggetto;
 import org.openspcoop2.core.monitor.rs.server.config.DBManager;
 import org.openspcoop2.core.monitor.rs.server.config.LoggerProperties;
@@ -93,8 +81,6 @@ import org.openspcoop2.protocol.sdk.config.IProtocolConfiguration;
 import org.openspcoop2.utils.Utilities;
 import org.openspcoop2.utils.service.context.IContext;
 import org.openspcoop2.utils.service.fault.jaxrs.FaultCode;
-import org.openspcoop2.utils.service.fault.jaxrs.ProblemValidation;
-import org.openspcoop2.utils.transport.http.HttpConstants;
 import org.openspcoop2.web.monitor.statistiche.constants.CostantiExporter;
 import org.openspcoop2.web.monitor.statistiche.dao.ConfigurazioniGeneraliService;
 import org.openspcoop2.web.monitor.statistiche.dao.StatisticheGiornaliereService;
@@ -520,8 +506,7 @@ public class ReportisticaHelper {
 		IDSoggetto erogatore = new IDSoggetto(body.getTipo(), body.getErogatore());
 		
 		overrideFiltroApiBase(tag, body, erogatore, wrap, env);
-		// TODO: Forse fare l'override di destinatario intendendolo come l'erogatore non
-		// va bene, ricontrolla ovunque.
+		
 		if (body.getErogatore() != null)
 			wrap.overrideParameter(CostantiExporter.DESTINATARIO, erogatore.toString() );
 	}
