@@ -87,22 +87,8 @@ public class TransazioniHelper {
 		
 		if (filtro_api == null)
 			return;
-
-		if (filtro_api.getTipo() == null) {
-			try {
-				IProtocolConfiguration protocolConf = env.protocolFactoryMgr
-						.getProtocolFactoryByName(env.tipo_protocollo).createProtocolConfiguration();
-				ServiceBinding defaultBinding = protocolConf.getDefaultServiceBindingConfiguration(null)
-						.getDefaultBinding();
-				filtro_api.setTipo(protocolConf.getTipoServizioDefault(defaultBinding));
-			} catch (Exception e) {
-				throw FaultCode.ERRORE_INTERNO
-						.toException("Impossibile determinare il tipo del servizio: " + e.getMessage());
-			}
-
-		}
 		
-		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null ) {
+		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null || !StringUtils.isEmpty(azione) || !StringUtils.isEmpty(filtro_api.getTipo())) {
 			
 			if (StringUtils.isEmpty(filtro_api.getNome())) {
 				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare Nome Servizio");
@@ -114,6 +100,20 @@ public class TransazioniHelper {
 			
 			if (erogatore == null || isEmpty(erogatore)) {
 				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
+			}
+			
+			if (filtro_api.getTipo() == null) {
+				try {
+					IProtocolConfiguration protocolConf = env.protocolFactoryMgr
+							.getProtocolFactoryByName(env.tipo_protocollo).createProtocolConfiguration();
+					ServiceBinding defaultBinding = protocolConf.getDefaultServiceBindingConfiguration(null)
+							.getDefaultBinding();
+					filtro_api.setTipo(protocolConf.getTipoServizioDefault(defaultBinding));
+				} catch (Exception e) {
+					throw FaultCode.ERRORE_INTERNO
+							.toException("Impossibile determinare il tipo del servizio: " + e.getMessage());
+				}
+
 			}
 			
 			String uri = ReportisticaHelper.buildNomeServizioForOverride(filtro_api.getNome(), filtro_api.getTipo(), filtro_api.getVersione(), Optional.of(erogatore));
@@ -210,6 +210,10 @@ public class TransazioniHelper {
 			MonitoraggioEnv env) {
 		if (body == null)
 			return;
+		
+		if (body.getAzione() != null && body.getApi() == null) {
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+		}
 
 		switch (body.getTipo()) {
 		case EROGAZIONE:

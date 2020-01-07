@@ -290,42 +290,7 @@ public class BaseHelper {
 	public static final Map<ProfiloEnum,String> tipoProtocolloFromProfilo = ProfiloUtils.getMapProfiloToProtocollo();	
 	public static final Map<String,ProfiloEnum> profiloFromTipoProtocollo = ProfiloUtils.getMapProtocolloToProfilo();
 	
-	@SuppressWarnings("unchecked")
-	public static <T> T deserializev2(Object o, Class<T> dest) {
-		T ret = null;
-		
-		if (o != null) {
-			if(dest.isInstance(o))
-			{
-				ret = dest.cast(o);
-			} 
-			else
-			{
-				try {
-					ret =  fromMap((Map<String, Object>) o,dest);
-				} catch (Exception e) {
-					throw FaultCode.RICHIESTA_NON_VALIDA.toException("Impossibile deserializzare l'oggetto " + dest.getName() + ", formato non valido: " + e.getMessage()); 
-				}
-			}
-		}
-		
-		validateBean(ret);
-		return ret;
-		
-		/*if (o == null) 
-			return null;
-				
-		if(dest.isInstance(o))
-			return dest.cast(o);
-		
-		try {
-			return fromMap((Map<String, Object>) o,dest);
-		} catch (Exception e) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Impossibile deserializzare l'oggetto " + dest.getName() + ", formato non valido: " + e.getMessage()); 
-		}*/
-	}
-	
-	
+
 	public static <T> void validateBean(T bean) {
 		if (bean == null) return;
 		
@@ -360,18 +325,31 @@ public class BaseHelper {
 	
 	
 	@SuppressWarnings("unchecked")
-	public static <T> Optional<T> deserializev3(Object o, Class<T> dest) {
-		if (o == null) 
-			return Optional.empty();
+	public static <T> T deserializev2(Object o, Class<T> dest) {
+		T ret = null;
 		
-		if(dest.isInstance(o))
-			return Optional.of(dest.cast(o));
-		
-		try {
-			return Optional.of(fromMap((Map<String, Object>) o,dest));
-		} catch (Exception e) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Impossibile deserializzare l'oggetto " + dest.getName() + ", formato non valido: " + e.getMessage()); 
+		if (o != null) {
+			if(dest.isInstance(o))
+			{
+				ret = dest.cast(o);
+			} 
+			else
+			{
+				try {
+					ret =  fromMap((Map<String, Object>) o,dest);
+				} catch (Exception e) {
+					throw FaultCode.RICHIESTA_NON_VALIDA.toException("Impossibile deserializzare l'oggetto " + dest.getName() + ", formato non valido: " + e.getMessage()); 
+				}
+			}
 		}
+		
+		validateBean(ret);
+		return ret;
+	}
+	
+	
+	public static <T> Optional<T> deserializev3(Object o, Class<T> dest) {
+		return Optional.ofNullable(deserializev2(o,dest));
 	}
 	
 	public static <T> T deserializeDefault(Object o, Class<T> dest) {		
@@ -384,8 +362,7 @@ public class BaseHelper {
 			}
 		} else {
 			return ret.get();
-		}	
-		
+		}		
 	}
 	
 	

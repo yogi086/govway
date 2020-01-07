@@ -503,7 +503,7 @@ public class ReportisticaHelper {
 			MonitoraggioEnv env) {
 		if (body == null) return;
 		
-		IDSoggetto erogatore = new IDSoggetto(body.getTipo(), body.getErogatore());
+		IDSoggetto erogatore = new IDSoggetto(env.soggetto.getTipo(), body.getErogatore());
 		
 		overrideFiltroApiBase(tag, body, erogatore, wrap, env);
 		
@@ -520,6 +520,7 @@ public class ReportisticaHelper {
 	public static final void overrideFiltroQualsiasi(String tag, FiltroQualsiasi body, HttpRequestWrapper wrap, MonitoraggioEnv env) {
 		if (body == null)
 			return;
+		
 		overrideFiltroApiBase(tag, body, env.soggetto, wrap, env);
 	}
 
@@ -557,15 +558,17 @@ public class ReportisticaHelper {
 			RicercaStatisticaDistribuzioneApplicativo body, HttpRequestWrapper wrap, MonitoraggioEnv env) {
 		if (body == null)
 			return;
+		
+		if (body.getAzione() != null && body.getApi() == null) {
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+		}
 
 		overrideRicercaBaseStatisticaSoggetti(body, wrap, env);
 		wrap.overrideParameter(CostantiExporter.AZIONE, body.getAzione());
 		overrideOpzioniGenerazioneReport(body.getReport(), wrap, env);
 		overrideFiltroEsito(body.getEsito(), wrap, env);
 	}
-
-	// public static final void
-	// overridericercaStatisticaDistribuzioneSoggettoLocale(/RicercaStatisticaDistribuzioneSoggettoLocale)
+	
 
 	public static final byte[] generateReport(HttpRequestWrapper request, IContext context) throws Exception {
 		DBManager dbManager = DBManager.getInstance();
@@ -632,6 +635,10 @@ public class ReportisticaHelper {
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
 				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.applicativo);
+		
+		if (body.getAzione() != null && body.getApi() == null) {
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+		}
 
 		overrideRicercaBaseStatisticaSoggetti(body, wrap, env);
 		overrideFiltroEsito(body.getEsito(), wrap, env);
@@ -666,6 +673,11 @@ public class ReportisticaHelper {
 	}
 
 	public static final byte[] getReportDistribuzioneEsiti(RicercaStatisticaDistribuzioneEsiti body,MonitoraggioEnv env) throws Exception {
+		
+		if (body.getAzione() != null && body.getApi() == null) {
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+		}
+		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
 				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.esiti);
@@ -719,6 +731,10 @@ public class ReportisticaHelper {
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
 				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.soggetto_remoto);
+		
+		if (body.getAzione() != null && body.getApi() == null) {
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+		}
 
 		overrideRicercaBaseStatistica(body, wrap, env);
 		overrideOpzioniGenerazioneReport(body.getReport(), wrap, env);
@@ -743,6 +759,11 @@ public class ReportisticaHelper {
 	}
 
 	public static final byte[] getReportDistribuzioneTemporale(RicercaStatisticaAndamentoTemporale body,MonitoraggioEnv env) throws Exception {
+		
+		if (body.getAzione() != null && body.getApi() == null) {
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+		}
+		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
 				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.temporale);
@@ -785,6 +806,11 @@ public class ReportisticaHelper {
 
 	public static final byte[] getReportDistribuzioneSoggettoLocale(RicercaStatisticaDistribuzioneSoggettoLocale body,
 			MonitoraggioEnv env) throws Exception {
+		
+		if (body.getAzione() != null && body.getApi() == null) {
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+		}
+		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo, null,
 				body.getTipo(), body.getReport().getFormato(), TipoReport.soggetto_locale);
@@ -886,38 +912,7 @@ public class ReportisticaHelper {
 		
 		String tag = null;
 		switch (body.getTipo()) {
-			case EROGAZIONE: {
-				/*FiltroErogazione ero = deserializev2(body.getApi(), FiltroErogazione.class);
-				
-				JAXRSParameterNameProvider parameterNameProvider = new JAXRSParameterNameProvider();
-	            Configuration<?> factoryCfg = Validation.byDefaultProvider().configure();
-	            ValidationConfiguration cfg = new ValidationConfiguration(parameterNameProvider);
-	            if (cfg != null) {
-	                factoryCfg.parameterNameProvider(cfg.getParameterNameProvider());
-	                factoryCfg.messageInterpolator(cfg.getMessageInterpolator());
-	                factoryCfg.traversableResolver(cfg.getTraversableResolver());
-	                factoryCfg.constraintValidatorFactory(cfg.getConstraintValidatorFactory());
-	                for (Map.Entry<String, String> entry : cfg.getProperties().entrySet()) {
-	                    factoryCfg.addProperty(entry.getKey(), entry.getValue());
-	                }
-	            }
-
-				ValidatorFactory factory = factoryCfg.buildValidatorFactory();
-				Validator validator = factory.getValidator();
-				Set<ConstraintViolation<FiltroErogazione>> violations = validator.validate(ero);
-				
-				if (!violations.isEmpty()) {
-	            	ProblemValidation problem = new ProblemValidation(FaultCode.RICHIESTA_NON_VALIDA.toFault());
-					
-					for (ConstraintViolation<FiltroErogazione> violation : violations) {
-						String msg = FiltroErogazione.class.getSimpleName() + "." + violation.getPropertyPath(); 
-						problem.addInvalidParam(msg, violation.getMessage(), null);
-					}
-					
-					throw FaultCode.RICHIESTA_NON_VALIDA.toException(Response.status(problem.getStatus()).entity(problem).type(HttpConstants.CONTENT_TYPE_JSON_PROBLEM_DETAILS_RFC_7807).build());
-				}*/
-				
-				
+			case EROGAZIONE: {			
 				ReportisticaHelper.overrideFiltroErogazione(tag, deserializev2(body.getApi(), FiltroErogazione.class), request, env);
 				break;
 			}

@@ -2170,7 +2170,6 @@ components:
       type: object
       required:
         - nome
-        - versione
       properties:
         tipo:
           $ref: 'govway_core.yaml#/components/schemas/Tipo'
