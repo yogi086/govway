@@ -45,7 +45,7 @@ public class FiltroApiBase  {
   @Schema(required = true, description = "")
   private String nome = null;
   
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   private Integer versione = null;
  /**
    * Get tipo
@@ -91,7 +91,6 @@ public class FiltroApiBase  {
    * @return versione
   **/
   @JsonProperty("versione")
-  @NotNull
   @Valid
   public Integer getVersione() {
     return versione;

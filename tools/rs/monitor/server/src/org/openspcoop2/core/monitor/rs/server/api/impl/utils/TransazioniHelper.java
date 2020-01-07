@@ -89,17 +89,13 @@ public class TransazioniHelper {
 			return;
 		
 		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null || !StringUtils.isEmpty(azione) || !StringUtils.isEmpty(filtro_api.getTipo())) {
-			
-			if (StringUtils.isEmpty(filtro_api.getNome())) {
-				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare Nome Servizio");
+						
+			if (erogatore == null || isEmpty(erogatore)) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
 			}
 			
 			if (filtro_api.getVersione() == null) {
-				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare la Versione del Servizio");
-			}
-			
-			if (erogatore == null || isEmpty(erogatore)) {
-				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
+				filtro_api.setVersione(1);
 			}
 			
 			if (filtro_api.getTipo() == null) {

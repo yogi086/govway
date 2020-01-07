@@ -696,7 +696,6 @@ public class ReportisticaHelper {
 			overrideFiltroMittenteQualsiasi( deserializev2( body.getMittente(), FiltroMittenteQualsiasi.class), wrap, env);
 			break;
 		}
-
 		wrap.overrideParameter(CostantiExporter.AZIONE, body.getAzione());
 		return generateReport(wrap, env.context);
 	}
@@ -728,14 +727,13 @@ public class ReportisticaHelper {
 
 	public static final byte[] getReportDistribuzioneSoggettoRemoto(RicercaStatisticaDistribuzioneSoggettoRemoto body,
 			MonitoraggioEnv env) throws Exception {
-		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
-		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
-				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.soggetto_remoto);
 		
 		if (body.getAzione() != null && body.getApi() == null) {
 			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
-
+		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
+		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
+				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.soggetto_remoto);
 		overrideRicercaBaseStatistica(body, wrap, env);
 		overrideOpzioniGenerazioneReport(body.getReport(), wrap, env);
 		switch (body.getTipo()) {
@@ -930,4 +928,24 @@ public class ReportisticaHelper {
 			dbManager.releaseConnectionConfig(connection);
 		}
 	}
+	
+	
+	// Continua da qui. Deve essere possibile specificare il soggettoErogatore senza dover specificare il filtroAPI per intero.
+	// Dovrei togliere il vincolo required da FiltroApiBase.nome e fare i controlli a mano come sto facendo.
+	// In questo modo sarà possibile valorizzare solo FiltroFruizione.erogatore e non tutto il resto di FiltroApiBase.
+	public static final Map<String, Object> parseFiltroApiMap(FiltroRicercaRuoloTransazioneEnum tipo, String nomeServizio,
+			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
+		
+		if (nomeServizio != null || tipoServizio != null || versioneServizio != null)
+		{
+			if(nomeServizio == null) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificare il nome_servizio");
+			}
+			
+			// TODO: Gli altri due hanno i defaults. (Che dovrei metttere ora)
+		}
+		
+		return buildFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto);
+	}
+	
 }
