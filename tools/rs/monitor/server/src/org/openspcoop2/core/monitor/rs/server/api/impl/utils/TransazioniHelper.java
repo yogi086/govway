@@ -84,11 +84,16 @@ public class TransazioniHelper {
 	public static final void overrideFiltroApiBase(String tag, FiltroApiBase filtro_api, String azione, IDSoggetto erogatore, TransazioniSearchForm search, MonitoraggioEnv env) {
 		
 		search.setGruppo(tag);
+		search.setNomeAzione(azione);
 		
 		if (filtro_api == null)
 			return;
 		
 		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null || !StringUtils.isEmpty(azione) || !StringUtils.isEmpty(filtro_api.getTipo())) {
+			
+			if (StringUtils.isEmpty(filtro_api.getNome())) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il nome della API");
+			}
 						
 			if (erogatore == null || isEmpty(erogatore)) {
 				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
@@ -118,7 +123,6 @@ public class TransazioniHelper {
 			
 			search.setNomeServizio(uri);			
 		}
-		search.setNomeAzione(azione);
 	}
 
 	public static final void overrideFiltroFruizione(String tag, FiltroFruizione filtro, String azione,

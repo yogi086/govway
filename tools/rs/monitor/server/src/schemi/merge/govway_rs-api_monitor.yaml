@@ -1793,8 +1793,6 @@ components:
           type: "string"
           format: "date-time"
     FiltroApiBase:
-      required:
-      - "nome"
       type: "object"
       properties:
         tipo:
@@ -1807,9 +1805,7 @@ components:
       type: "object"
       allOf:
       - $ref: "#/components/schemas/FiltroApiBase"
-      - required:
-        - "erogatore"
-        type: "object"
+      - type: "object"
         properties:
           erogatore:
             $ref: "#/components/schemas/SimpleName"

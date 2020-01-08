@@ -104,6 +104,55 @@ Scenario: Ricerca per FiltroApi con tipo qualsiasi
     * match response.items == '#notnull'
     * match response.items == '#[(numeroFruizioni + numeroErogazioni)]'
 
+@FiltroApiErrato
+Scenario Outline: Ricerca per FiltroApi Errato
+    * def filtro = 
+    """
+    ({    
+        "intervallo_temporale": intervallo_temporale,
+        "tipo": <ruolo_transazione>,
+        
+        "api": {
+            "nome": <nome>,
+            "versione":  <versione>,
+            "erogatore": <erogatore>,
+            "tipo":  <tipo>
+        },
+        "azione": <azione>
+    })
+    """
+
+    Given request filtro
+    When method post
+    Then status 400
+
+    # Testo le SimpleSearch
+    * def qparams =
+    """
+    ({
+        "data_inizio": filtro.intervallo_temporale.data_inizio,
+        "data_fine": filtro.intervallo_temporale.data_fine,
+        "tipo": filtro.tipo,
+        "nome_servizio": filtro.api.nome,
+        "versione_servizio": filtro.api.versione,
+        "tipo_servizio": filtro.api.tipo,
+        "soggetto_remoto": filtro.api.erogatore,
+        "azione": filtro.azione
+    })
+    """
+
+    Given params qparams
+    When method get
+    Then status 400
+
+Examples:
+    | ruolo_transazione | nome                   | versione | erogatore | azione            | tipo         |
+    | 'erogazione'      | null                   | 1        | null      | null              | null         |
+    | 'erogazione'      | null                   | null     | null      | null              | 'solo_tipo'  |
+    | 'erogazione'      | null                   | null     | null      | 'solo_azione'     | null         |
+    | 'fruizione'       | 'nome_senza_erogatore' | null     | null      | null              | null         |
+    | 'fruizione'       | null                   | null     | null      | null              | 'solo_tipo'  |
+
 
 @FiltroApiTags
 Scenario: Ricerca tramite richiesta POST con tag 'TESTSUITE'

@@ -2168,8 +2168,6 @@ components:
 
     FiltroApiBase:
       type: object
-      required:
-        - nome
       properties:
         tipo:
           $ref: 'govway_core.yaml#/components/schemas/Tipo'
@@ -2183,8 +2181,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/FiltroApiBase'
         - type: object
-          required:
-            - erogatore
           properties:
             erogatore:
               $ref: 'govway_core.yaml#/components/schemas/SimpleName'

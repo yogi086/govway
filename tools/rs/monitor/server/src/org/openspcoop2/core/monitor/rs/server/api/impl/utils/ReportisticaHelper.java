@@ -22,6 +22,7 @@
 
 package org.openspcoop2.core.monitor.rs.server.api.impl.utils;
 
+import static org.openspcoop2.core.monitor.rs.server.api.impl.utils.TransazioniHelper.isEmpty;
 import static org.openspcoop2.utils.service.beans.utils.BaseHelper.deserializeDefault;
 import static org.openspcoop2.utils.service.beans.utils.BaseHelper.deserializev2;
 import static org.openspcoop2.utils.service.beans.utils.BaseHelper.evalnull;
@@ -79,6 +80,7 @@ import org.openspcoop2.generic_project.utils.ServiceManagerProperties;
 import org.openspcoop2.message.constants.ServiceBinding;
 import org.openspcoop2.protocol.sdk.config.IProtocolConfiguration;
 import org.openspcoop2.utils.Utilities;
+import org.openspcoop2.utils.service.beans.TransazioneRuoloEnum;
 import org.openspcoop2.utils.service.context.IContext;
 import org.openspcoop2.utils.service.fault.jaxrs.FaultCode;
 import org.openspcoop2.web.monitor.statistiche.constants.CostantiExporter;
@@ -524,34 +526,44 @@ public class ReportisticaHelper {
 		overrideFiltroApiBase(tag, body, env.soggetto, wrap, env);
 	}
 
-	public static final void overrideFiltroApiBase(String tag, FiltroApiBase body, IDSoggetto erogatore, HttpRequestWrapper wrap, MonitoraggioEnv env) {
-		if (body == null)
-			return;
-
-		if (body.getTipo() == null) {
-			try {
-				IProtocolConfiguration protocolConf = env.protocolFactoryMgr
-						.getProtocolFactoryByName(env.tipo_protocollo).createProtocolConfiguration();
-				ServiceBinding defaultBinding = protocolConf.getDefaultServiceBindingConfiguration(null)
-						.getDefaultBinding();
-				body.setTipo(protocolConf.getTipoServizioDefault(defaultBinding));
-			} catch (Exception e) {
-				throw FaultCode.ERRORE_INTERNO
-						.toException("Impossibile determinare il tipo del servizio: " + e.getMessage());
-			}
-
-		}
-		
-		if (body.getVersione() == null) {
-			body.setVersione(1);
-		}
-
+	public static final void overrideFiltroApiBase(String tag, FiltroApiBase filtro_api, IDSoggetto erogatore, HttpRequestWrapper wrap, MonitoraggioEnv env) {
 		if(tag!=null) {
 			wrap.overrideParameter(CostantiExporter.GRUPPO, tag);
 		}
 		
-		wrap.overrideParameter(CostantiExporter.SERVIZIO,
-				buildNomeServizioForOverride(body.getNome(), body.getTipo(), body.getVersione(), Optional.of(erogatore)));
+		if (filtro_api == null)
+			return;
+		
+		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null || !StringUtils.isEmpty(filtro_api.getTipo())) {
+			
+			if (StringUtils.isEmpty(filtro_api.getNome())) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il nome della API");
+			}
+						
+			if (erogatore == null || isEmpty(erogatore)) {
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
+			}
+			
+			if (filtro_api.getVersione() == null) {
+				filtro_api.setVersione(1);
+			}
+			
+			if (filtro_api.getTipo() == null) {
+				try {
+					IProtocolConfiguration protocolConf = env.protocolFactoryMgr
+							.getProtocolFactoryByName(env.tipo_protocollo).createProtocolConfiguration();
+					ServiceBinding defaultBinding = protocolConf.getDefaultServiceBindingConfiguration(null)
+							.getDefaultBinding();
+					filtro_api.setTipo(protocolConf.getTipoServizioDefault(defaultBinding));
+				} catch (Exception e) {
+					throw FaultCode.ERRORE_INTERNO
+							.toException("Impossibile determinare il tipo del servizio: " + e.getMessage());
+				}
+
+			}
+			wrap.overrideParameter(CostantiExporter.SERVIZIO,
+					buildNomeServizioForOverride(filtro_api.getNome(), filtro_api.getTipo(), filtro_api.getVersione(), Optional.of(erogatore)));
+		}
 	}
 
 	public static final void overrideRicercaStatisticaDistribuzioneApplicativo(
@@ -868,26 +880,6 @@ public class ReportisticaHelper {
 		}
 	}
 
-	public static final Map<String, Object> buildFiltroApiMap(FiltroRicercaRuoloTransazioneEnum tipo, String nomeServizio,
-			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
-		LinkedHashMap<String, Object> filtroApi = new LinkedHashMap<>();
-		filtroApi.put("nome", nomeServizio);
-		filtroApi.put("tipo", tipoServizio);
-		filtroApi.put("versione", versioneServizio);
-		// Filtro Api
-		switch (tipo) {
-		case EROGAZIONE:
-			break;
-		case FRUIZIONE:
-			filtroApi.put("erogatore", soggettoRemoto);
-			break;
-		case QUALSIASI:
-			break;
-		}
-
-		return filtroApi;
-	}
-
 	public static final byte[] exportConfigurazioneApi(RicercaConfigurazioneApi body, MonitoraggioEnv env) {
 		DBManager dbManager = DBManager.getInstance();
 		Connection connection = null;
@@ -936,16 +928,53 @@ public class ReportisticaHelper {
 	public static final Map<String, Object> parseFiltroApiMap(FiltroRicercaRuoloTransazioneEnum tipo, String nomeServizio,
 			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
 		
+		// Se specifico un pezzo del filtroAPI, allora devo avere un filtro completo. (meno i defaults)
 		if (nomeServizio != null || tipoServizio != null || versioneServizio != null)
 		{
 			if(nomeServizio == null) {
 				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificare il nome_servizio");
 			}
 			
+			if (tipo == FiltroRicercaRuoloTransazioneEnum.FRUIZIONE && StringUtils.isEmpty(soggettoRemoto))
+			{
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificando il ruolo <" + tipo + "> è necessario specificare anche il soggettoRemoto (Erogatore in caso di Fruizioni)");
+			}
 			// TODO: Gli altri due hanno i defaults. (Che dovrei metttere ora)
 		}
 		
+		if (tipo != FiltroRicercaRuoloTransazioneEnum.FRUIZIONE && !StringUtils.isEmpty(soggettoRemoto))
+		{
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificare il soggetto_remoto solo in caso di ruolo " + FiltroRicercaRuoloTransazioneEnum.FRUIZIONE );
+		}
+		
 		return buildFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto);
+	}
+	
+	
+	public static final Map<String, Object> parseFiltroApiMap(TransazioneRuoloEnum tipo, String nomeServizio,
+			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
+		FiltroRicercaRuoloTransazioneEnum newTipo = tipo == TransazioneRuoloEnum.EROGAZIONE ? FiltroRicercaRuoloTransazioneEnum.EROGAZIONE : FiltroRicercaRuoloTransazioneEnum.FRUIZIONE;
+		return parseFiltroApiMap(newTipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto);
+	}
+	
+	private static final Map<String, Object> buildFiltroApiMap(FiltroRicercaRuoloTransazioneEnum tipo, String nomeServizio,
+			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
+		LinkedHashMap<String, Object> filtroApi = new LinkedHashMap<>();
+		filtroApi.put("nome", nomeServizio);
+		filtroApi.put("tipo", tipoServizio);
+		filtroApi.put("versione", versioneServizio);
+		// Filtro Api
+		switch (tipo) {
+		case EROGAZIONE:
+			break;
+		case FRUIZIONE:
+			filtroApi.put("erogatore", soggettoRemoto);
+			break;
+		case QUALSIASI:
+			break;
+		}
+
+		return filtroApi;
 	}
 	
 }

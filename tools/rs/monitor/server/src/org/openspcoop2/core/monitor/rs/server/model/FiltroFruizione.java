@@ -40,14 +40,13 @@ import javax.validation.Valid;
 
 public class FiltroFruizione extends FiltroApiBase {
   
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   private String erogatore = null;
  /**
    * Get erogatore
    * @return erogatore
   **/
   @JsonProperty("erogatore")
-  @NotNull
   @Valid
  @Pattern(regexp="^[0-9A-Za-z]+$") @Size(max=255)  public String getErogatore() {
     return erogatore;

@@ -246,9 +246,7 @@ public class MonitoraggioApiServiceImpl extends BaseImpl implements Monitoraggio
 			
 			RicercaIdApplicativo bodyRicerca = new RicercaIdApplicativo();
 			bodyRicerca.setTipo(tipo);
-			if (nomeServizio != null || tipoServizio != null || versioneServizio != null || soggettoRemoto != null) {
-				bodyRicerca.setApi(ReportisticaHelper.buildFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
-			}
+			bodyRicerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));			
 			FiltroTemporale iTemporale = new FiltroTemporale();
 			iTemporale.setDataInizio(dataInizio);
 			iTemporale.setDataFine(dataFine);
@@ -360,12 +358,9 @@ public class MonitoraggioApiServiceImpl extends BaseImpl implements Monitoraggio
 				FiltroEsito filtroEsito = new FiltroEsito();
 				filtroEsito.setTipo(EsitoTransazioneFullSearchEnum.valueOf(esito.name()));
 				bodyRicerca.setEsito(filtroEsito);
-			}
-			
-			if (nomeServizio != null || tipoServizio != null || versioneServizio != null || soggettoRemoto != null) {
-				bodyRicerca.setApi(ReportisticaHelper.buildFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
-			}
-        
+			}	
+			bodyRicerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+		        
 			ListaTransazioni ret = TransazioniHelper.findAllTransazioni(bodyRicerca, env);
 			context.getLogger().info("Invocazione completata con successo");
 			return ret;

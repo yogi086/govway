@@ -42,7 +42,7 @@ public class FiltroApiBase  {
   @Schema(description = "")
   private String tipo = null;
   
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   private String nome = null;
   
   @Schema(description = "")
@@ -71,7 +71,6 @@ public class FiltroApiBase  {
    * @return nome
   **/
   @JsonProperty("nome")
-  @NotNull
   @Valid
  @Pattern(regexp="^[_A-Za-z][\\-\\._A-Za-z0-9]*$") @Size(max=255)  public String getNome() {
     return nome;
