@@ -42,6 +42,16 @@ import org.openspcoop2.utils.UtilsException;
 
 public class PasswordGenerator extends PasswordVerifier {
 	
+	public static PasswordGenerator DEFAULT;
+	static {
+		DEFAULT = new PasswordGenerator();
+		DEFAULT.setIncludeLowerCaseLetter(true);
+		DEFAULT.setIncludeUpperCaseLetter(true);
+		DEFAULT.setIncludeNumber(true);
+		DEFAULT.setIncludeNotAlphanumericSymbol(true);
+	}
+	
+	
 	public PasswordGenerator(){
 		super();
 	}
