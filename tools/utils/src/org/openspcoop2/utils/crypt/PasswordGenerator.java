@@ -66,6 +66,12 @@ public class PasswordGenerator extends PasswordVerifier {
 	}
 	public PasswordGenerator(PasswordVerifier pv) throws UtilsException{
 		super(pv);
+		if(!this.includeLowerCaseLetter && !this.includeUpperCaseLetter && !this.includeNumber) {
+			// non essendoci vincoli genero password come il generatore di default
+			this.includeLowerCaseLetter = DEFAULT.isIncludeLowerCaseLetter();
+			this.includeUpperCaseLetter = DEFAULT.isIncludeUpperCaseLetter();
+			this.includeNumber = DEFAULT.isIncludeNumber();
+		}
 	}
 	
 	private String dictionaryChars = "abcdefghijklmnopqrstuvwxyz";
@@ -93,7 +99,21 @@ public class PasswordGenerator extends PasswordVerifier {
 	
 	
 	public String generate() throws UtilsException{
-		return this.generate(10);
+		int defaultLength = 10;
+		
+		if(this.minLenght>0){
+			if(defaultLength<this.minLenght) {
+				defaultLength = this.minLenght;
+			}
+		}
+		
+		if(this.maxLenght>0){
+			if(defaultLength>this.maxLenght){
+				defaultLength = this.maxLenght;
+			}
+		}
+		
+		return this.generate(defaultLength);
 	}
 	public String generate(int length) throws UtilsException{
 		return this.generate("login",length);

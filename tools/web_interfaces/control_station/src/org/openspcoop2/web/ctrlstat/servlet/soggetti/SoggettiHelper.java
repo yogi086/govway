@@ -130,7 +130,7 @@ public class SoggettiHelper extends ConnettoriHelper {
 			DataElement de = new DataElement();
 			de.setLabel(SoggettiCostanti.PARAMETRO_SOGGETTO_ID);
 			de.setValue(id);
-			de.setType("hidden");
+			de.setType(DataElementType.HIDDEN);
 			de.setName(SoggettiCostanti.PARAMETRO_SOGGETTO_ID);
 			dati.addElement(de);
 		}
