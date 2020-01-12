@@ -538,11 +538,11 @@ public class ReportisticaHelper {
 		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null || !StringUtils.isEmpty(filtro_api.getTipo())) {
 			
 			if (StringUtils.isEmpty(filtro_api.getNome())) {
-				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Filtro Api incompleto. Specificare il nome della API");
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il nome della API");
 			}
 						
 			if (erogatore == null || isEmpty(erogatore)) {
-				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
 			}
 			
 			if (filtro_api.getVersione() == null) {
@@ -573,7 +573,7 @@ public class ReportisticaHelper {
 			return;
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 
 		overrideRicercaBaseStatisticaSoggetti(body, wrap, env);
@@ -650,7 +650,7 @@ public class ReportisticaHelper {
 				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.applicativo);
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 
 		overrideRicercaBaseStatisticaSoggetti(body, wrap, env);
@@ -688,7 +688,7 @@ public class ReportisticaHelper {
 	public static final byte[] getReportDistribuzioneEsiti(RicercaStatisticaDistribuzioneEsiti body,MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
@@ -742,7 +742,7 @@ public class ReportisticaHelper {
 			MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
@@ -772,7 +772,7 @@ public class ReportisticaHelper {
 	public static final byte[] getReportDistribuzioneTemporale(RicercaStatisticaAndamentoTemporale body,MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
@@ -819,7 +819,7 @@ public class ReportisticaHelper {
 			MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
@@ -936,7 +936,7 @@ public class ReportisticaHelper {
 		if (tipo == FiltroRicercaRuoloTransazioneEnum.EROGAZIONE 
 				&& (!StringUtils.isEmpty(soggettoRemoto) || !StringUtils.isEmpty(soggettoErogatore))) {
 			
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Nel caso di ruolo <" + tipo
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Nel caso di ruolo <" + tipo
 					+ ">, non bisogna specificare né soggetto_remoto né soggetto_erogatore");
 		}
 
@@ -945,7 +945,7 @@ public class ReportisticaHelper {
 				&& !StringUtils.isEmpty(soggettoRemoto) 
 				&& !StringUtils.equals(soggettoRemoto, soggettoErogatore)) {
 			
-			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Ricerca ambigua. Nel caso di ruolo <"
+			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Ricerca ambigua. Nel caso di ruolo <"
 					+ tipo
 					+ ">, soggettoErogatore e soggettoRemoto specificano la stessa informazione."
 					+ "Se specificati entrambi allora devono essere uguali");
@@ -956,16 +956,16 @@ public class ReportisticaHelper {
 		if (nomeServizio != null || tipoServizio != null || versioneServizio != null || soggettoErogatore != null) {
 		
 			if (nomeServizio == null) {
-				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Specificare il nome_servizio");
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificare il nome_servizio");
 			}
 
 			if (tipo == FiltroRicercaRuoloTransazioneEnum.FRUIZIONE && (StringUtils.isEmpty(soggettoRemoto) || StringUtils.isEmpty(soggettoErogatore)) ) {
-				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Specificando un filtro API per il ruolo <" + tipo
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificando un filtro API per il ruolo <" + tipo
 						+ ">, è necessario specificare anche il soggetto_remoto (Erogatore in caso di Fruizioni)");
 			}
 			
 			if (tipo == FiltroRicercaRuoloTransazioneEnum.QUALSIASI && StringUtils.isEmpty(soggettoErogatore)) {
-				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Specificando un filtro API per il ruolo <" + tipo
+				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificando un filtro API per il ruolo <" + tipo
 						+ ">, è necessario specificare anche il soggetto_erogatore");
 			}
 			// TODO: Gli altri due hanno i defaults. (Che dovrei metttere ora?)
