@@ -2,7 +2,7 @@
 Feature: Ricerca Temporale Transazioni e Ricerca Eventi
 
 Background: 
-#* configure afterFeature = function(){ karate.call('classpath:cleanup_tests.feature'); }
+* configure afterFeature = function(){ karate.call('classpath:cleanup_tests.feature'); }
 
 * def ricercaUrl = monitorUrl + '/monitoraggio/transazioni'
 * call read('classpath:crud_commons.feature')
@@ -104,6 +104,15 @@ Scenario: Ricerca per FiltroApi con tipo qualsiasi
     * match response.items == '#notnull'
     * match response.items == '#[(numeroFruizioni + numeroErogazioni)]'
 
+    # Imposto il solo soggetto_remoto e, dato che siamo in single-tenant, tutte le transazioni restituite
+    # devono essere relative ad api erogate dal soggetto_remoto
+    * set filtro.api = ({ soggetto_remoto: setup.fruizione_petstore.erogatore})
+    Given request filtro
+    When method post
+    Then status 200
+    * match response.items == '#notnull'
+    * match each response.items[*].api.erogatore == filtro.api.soggetto_remoto
+
 @FiltroApiErrato
 Scenario Outline: Ricerca per FiltroApi Errato
     * def filtro = 
@@ -124,7 +133,7 @@ Scenario Outline: Ricerca per FiltroApi Errato
 
     Given request filtro
     When method post
-    Then status 400
+    Then assert responseStatus == 400 || responseStatus == 422
 
     # Testo le SimpleSearch
     * def qparams =
@@ -143,7 +152,7 @@ Scenario Outline: Ricerca per FiltroApi Errato
 
     Given params qparams
     When method get
-    Then status 400
+    Then assert responseStatus == 400 || responseStatus == 422
 
 Examples:
     | ruolo_transazione | nome                   | versione | erogatore | azione            | tipo         |
@@ -152,6 +161,40 @@ Examples:
     | 'erogazione'      | null                   | null     | null      | 'solo_azione'     | null         |
     | 'fruizione'       | 'nome_senza_erogatore' | null     | null      | null              | null         |
     | 'fruizione'       | null                   | null     | null      | null              | 'solo_tipo'  |
+
+@FiltroApiErratoSimpleSearch
+Scenario Outline: Filtro Api Errato Simple Search
+
+    * def qparams =
+    """
+    ({
+        "data_inizio": intervallo_temporale.data_inizio,
+        "data_fine": intervallo_temporale.data_fine,
+        "tipo": <ruolo_transazione>,
+        "nome_servizio": <nome>,
+        "versione_servizio": <versione>,
+        "tipo_servizio": <tipo>,
+        "soggetto_remoto": <soggetto_remoto>,
+        "azione": <azione>,
+        "soggetto_erogatore": <erogatore>
+    })
+    """
+
+    Given params qparams
+    When method get
+    Then assert responseStatus == 400 || responseStatus == 422
+
+Examples:
+    | ruolo_transazione | nome                   | versione | erogatore                     | azione            | tipo         | soggetto_remoto |
+    | 'erogazione'      | null                   | 1        | null                          | null              | null         |null             |
+    | 'erogazione'      | null                   | null     | null                          | null              | 'solotipo'  |null             |
+    | 'erogazione'      | null                   | null     | null                          | 'solo_azione'     | null         |null             |
+    | 'erogazione'      | 'petstore'             | 1        | 'danonspecificare'          | 'azione'          | 'tipo1'      |null             |
+    | 'erogazione'      | 'petstore'             | 1        | null                          | 'azione'          | 'tipo1'      |'danonspecificare' |
+    | 'fruizione'       | 'nomesenzaerogatore' | null     | null                          | null              | null         |null             |
+    | 'fruizione'       | null                   | null     | null                          | null              | 'solotipo'  |null             |
+    | 'fruizione'       | null                   | null     | 'diversodasoggettoremoto'                      | null              | 'solotipo'  |'diversodaerogatore'             |
+    | 'qualsiasi'       | null                   | null     | null                          | null              | 'solotipo'  |null             |
 
 
 @FiltroApiTags
@@ -440,6 +483,16 @@ Scenario: RicercaSempliceTransazioni tramite richiesta GET con tipo transazione 
     When method get
     Then status 200
     * match response.items == '#[(numeroFruizioni + numeroErogazioni)]'
+
+
+    # Imposto il solo soggetto_remoto e, dato che siamo in single-tenant, tutte le transazioni restituite
+    # devono essere relative ad api erogate dal soggetto_remoto
+    * set query.soggetto_remoto = setup.fruizione_petstore.erogatore
+    Given params query
+    When method get
+    Then status 200
+    * match response.items == '#notnull'
+    * match each response.items[*].api.erogatore == query.soggetto_remoto
     
 @RicercaSempliceTransazioniTags
 Scenario: RicercaSempliceTransazioni tramite richiesta GET con tag 'TESTSUITE'

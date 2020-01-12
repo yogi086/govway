@@ -231,11 +231,11 @@ public class MonitoraggioApiServiceImpl extends BaseImpl implements Monitoraggio
      *
      */
 	@Override
-	public ListaTransazioni findAllTransazioniByIdApplicativoSimpleSearch(DateTime dataInizio, 
-			DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, String idApplicativo, ProfiloEnum profilo, String soggetto,
-			Integer offset, Integer limit, String sort, String idCluster,  String soggettoRemoto, String tag, String nomeServizio, 
-			String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, Boolean ricercaEsatta, Boolean caseSensitive
-		) {
+	public ListaTransazioni findAllTransazioniByIdApplicativoSimpleSearch(DateTime dataInizio, DateTime dataFine,
+			FiltroRicercaRuoloTransazioneEnum tipo, String idApplicativo, ProfiloEnum profilo, String soggetto,
+			Integer offset, Integer limit, String sort, String idCluster, String soggettoRemoto,
+			String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio,
+			String azione, EsitoTransazioneSimpleSearchEnum esito, Boolean ricercaEsatta, Boolean caseSensitive) {
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");     
@@ -246,7 +246,7 @@ public class MonitoraggioApiServiceImpl extends BaseImpl implements Monitoraggio
 			
 			RicercaIdApplicativo bodyRicerca = new RicercaIdApplicativo();
 			bodyRicerca.setTipo(tipo);
-			bodyRicerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));			
+			bodyRicerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto, soggettoErogatore));			
 			FiltroTemporale iTemporale = new FiltroTemporale();
 			iTemporale.setDataInizio(dataInizio);
 			iTemporale.setDataFine(dataFine);
@@ -282,64 +282,65 @@ public class MonitoraggioApiServiceImpl extends BaseImpl implements Monitoraggio
 		}
     }
     
-    /**
-     * Ricerca semplificata delle transazioni in base all&#x27;identificativo messaggio
-     *
-     * Permette di recuperare i dettagli delle transazioni, gestite su GovWay, ricercandole in base all&#x27;identificativo messaggio
-     *
-     */
+	/**
+	 * Ricerca semplificata delle transazioni in base all&#x27;identificativo
+	 * messaggio
+	 *
+	 * Permette di recuperare i dettagli delle transazioni, gestite su GovWay,
+	 * ricercandole in base all&#x27;identificativo messaggio
+	 *
+	 */
 	@Override
-    public ListaTransazioni findAllTransazioniByIdMessaggio(TipoMessaggioEnum tipoMessaggio, String id, ProfiloEnum profilo, String soggetto, Integer offset, Integer limit, String sort) {
+	public ListaTransazioni findAllTransazioniByIdMessaggio(TipoMessaggioEnum tipoMessaggio, String id,
+			ProfiloEnum profilo, String soggetto, Integer offset, Integer limit, String sort) {
 		IContext context = this.getContext();
 		try {
-			context.getLogger().info("Invocazione in corso ...");     
+			context.getLogger().info("Invocazione in corso ...");
 
 			AuthorizationManager.authorize(context, getAuthorizationConfig());
-			context.getLogger().debug("Autorizzazione completata con successo");     
-                        
-			SearchFormUtilities searchFormUtilities = new SearchFormUtilities();	
+			context.getLogger().debug("Autorizzazione completata con successo");
+
+			SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 			TransazioniSearchForm search = searchFormUtilities.getIdMessaggioSearchForm(context, profilo, soggetto);
-			
+
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			search.setIdEgov(id);
-			search.setTipoIdMessaggio(tipoMessaggio == TipoMessaggioEnum.RICHIESTA ? "Richiesta" : "Risposta" );
-        
+			search.setTipoIdMessaggio(tipoMessaggio == TipoMessaggioEnum.RICHIESTA ? "Richiesta" : "Risposta");
+
 			ListaTransazioni ret = searchTransazioni(search, offset, limit, sort, env);
 			context.getLogger().info("Invocazione completata con successo");
 			return ret;
-		}
-		catch(javax.ws.rs.WebApplicationException e) {
-			context.getLogger().error("Invocazione terminata con errore '4xx': %s",e, e.getMessage());
+		} catch (javax.ws.rs.WebApplicationException e) {
+			context.getLogger().error("Invocazione terminata con errore '4xx': %s", e, e.getMessage());
 			throw e;
-		}
-		catch(Throwable e) {
-			context.getLogger().error("Invocazione terminata con errore: %s",e, e.getMessage());
+		} catch (Throwable e) {
+			context.getLogger().error("Invocazione terminata con errore: %s", e, e.getMessage());
 			throw FaultCode.ERRORE_INTERNO.toException(e);
 		}
-    }
+	}
     
-    /**
-     * Ricerca semplificata delle transazioni in base ai parametri di uso più comune
-     *
-     * Permette di recuperare i dettagli delle transazioni, gestite su GovWay, ricercandole in base a parametri di filtro di uso più comune
-     *
-     */
+	/**
+	 * Ricerca semplificata delle transazioni in base ai parametri di uso più comune
+	 *
+	 * Permette di recuperare i dettagli delle transazioni, gestite su GovWay,
+	 * ricercandole in base a parametri di filtro di uso più comune
+	 *
+	 */
 	@Override
-    public ListaTransazioni findAllTransazioniBySimpleSearch(DateTime dataInizio, DateTime dataFine, 
-    		FiltroRicercaRuoloTransazioneEnum tipo, ProfiloEnum profilo, String soggetto, Integer offset,
-    		Integer limit, String sort,  String idCluster,  String soggettoRemoto, String tag, String nomeServizio, 
-    		String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito
-    	) 
-	{
+	public ListaTransazioni findAllTransazioniBySimpleSearch(DateTime dataInizio, DateTime dataFine,
+			FiltroRicercaRuoloTransazioneEnum tipo, ProfiloEnum profilo, String soggetto, Integer offset, Integer limit,
+			String sort, String idCluster, String soggettoRemoto, String soggettoErogatore, String tag,
+			String nomeServizio, String tipoServizio, Integer versioneServizio, String azione,
+			EsitoTransazioneSimpleSearchEnum esito) {
 		IContext context = this.getContext();
 		try {
-			context.getLogger().info("Invocazione in corso ...");     
+			context.getLogger().info("Invocazione in corso ...");
 
 			AuthorizationManager.authorize(context, getAuthorizationConfig());
-			context.getLogger().debug("Autorizzazione completata con successo");     
+			context.getLogger().debug("Autorizzazione completata con successo");
 
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
-			
+
 			RicercaIntervalloTemporale bodyRicerca = new RicercaIntervalloTemporale();
 			FiltroTemporale intervalloTemporale = new FiltroTemporale();
 			intervalloTemporale.setDataFine(dataFine);
@@ -349,31 +350,30 @@ public class MonitoraggioApiServiceImpl extends BaseImpl implements Monitoraggio
 			bodyRicerca.setIdCluster(idCluster);
 			bodyRicerca.setTag(tag);
 			bodyRicerca.setAzione(azione);
-			
+
 			bodyRicerca.setSort(sort);
 			bodyRicerca.setLimit(limit);
 			bodyRicerca.setOffset(offset);
-			
+
 			if (esito != null) {
 				FiltroEsito filtroEsito = new FiltroEsito();
 				filtroEsito.setTipo(EsitoTransazioneFullSearchEnum.valueOf(esito.name()));
 				bodyRicerca.setEsito(filtroEsito);
-			}	
-			bodyRicerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
-		        
+			}
+			bodyRicerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio,
+					soggettoRemoto,soggettoErogatore));
+
 			ListaTransazioni ret = TransazioniHelper.findAllTransazioni(bodyRicerca, env);
 			context.getLogger().info("Invocazione completata con successo");
 			return ret;
-		}
-		catch(javax.ws.rs.WebApplicationException e) {
-			context.getLogger().error("Invocazione terminata con errore '4xx': %s",e, e.getMessage());
+		} catch (javax.ws.rs.WebApplicationException e) {
+			context.getLogger().error("Invocazione terminata con errore '4xx': %s", e, e.getMessage());
 			throw e;
-		}
-		catch(Throwable e) {
-			context.getLogger().error("Invocazione terminata con errore: %s",e, e.getMessage());
+		} catch (Throwable e) {
+			context.getLogger().error("Invocazione terminata con errore: %s", e, e.getMessage());
 			throw FaultCode.ERRORE_INTERNO.toException(e);
 		}
-    }
+	}
     
     /**
      * Dettaglio di un evento

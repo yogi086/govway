@@ -49,6 +49,7 @@ import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizioneToken
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIdAutenticato;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIndirizzoIP;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteQualsiasi;
+import org.openspcoop2.core.monitor.rs.server.model.FiltroApiQualsiasi;
 import org.openspcoop2.core.monitor.rs.server.model.ListaTransazioni;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaBaseTransazione;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaIdApplicativo;
@@ -118,8 +119,9 @@ public class TransazioniHelper {
 			}
 			
 			String uri = ReportisticaHelper.buildNomeServizioForOverride(filtro_api.getNome(), filtro_api.getTipo(), filtro_api.getVersione(), Optional.of(erogatore));
-			if (uri == null)
+			if (uri == null) {
 				throw FaultCode.ERRORE_INTERNO.toException("Non sono riuscito a costruire la URI dell'Id Servizio");
+			}
 			
 			search.setNomeServizio(uri);			
 		}
@@ -131,10 +133,18 @@ public class TransazioniHelper {
 			return;
 
 		overrideFiltroApiBase(tag, filtro, azione, new IDSoggetto(env.soggetto.getTipo(), filtro.getErogatore()), search, env);
-		if (filtro.getErogatore() != null)
-			search.setTipoNomeDestinatario(new IDSoggetto(env.soggetto.getTipo(), filtro.getErogatore()).toString());
 	}
+	
+	public static final void overrideFiltroQualsiasi(String tag, FiltroApiQualsiasi filtro, String azione,
+			TransazioniSearchForm search, MonitoraggioEnv env) {
+		if (filtro == null)
+			return;
 
+		overrideFiltroFruizione(tag, filtro, azione, search, env);
+		if (!StringUtils.isEmpty(filtro.getSoggettoRemoto()))
+			search.setTipoNomeTrafficoPerSoggetto(new IDSoggetto(env.soggetto.getTipo(), filtro.getSoggettoRemoto()).toString());	
+	}
+	
 	public static final void overrideFiltroRicercaId(FiltroRicercaId filtro, TransazioniSearchForm search,
 			MonitoraggioEnv env, String tipoRiconoscimento) {
 		if (filtro == null)
@@ -223,7 +233,7 @@ public class TransazioniHelper {
 			overrideFiltroFruizione(body.getTag(), deserializev2(body.getApi(), FiltroFruizione.class),body.getAzione(), search, env);
 			break;
 		case QUALSIASI:
-			overrideFiltroApiBase(body.getTag(), deserializev2(body.getApi(), FiltroApiBase.class), body.getAzione(), env.soggetto, search, env);
+			overrideFiltroQualsiasi(body.getTag(), deserializev2(body.getApi(), FiltroApiQualsiasi.class), body.getAzione(), search, env);
 			break;
 		}
 
@@ -361,6 +371,9 @@ public class TransazioniHelper {
 		}
 	}
 
+	/**
+	 * Effettua la ricerca delle transazioni dato un oggetto TransazioniSearchForm correttamente popolato
+	 */
 	public static final ListaTransazioni searchTransazioni(TransazioniSearchForm search, Integer offset, Integer limit,
 			String sort, MonitoraggioEnv env) throws UtilsException, InstantiationException, IllegalAccessException {
 		DBManager dbManager = DBManager.getInstance();

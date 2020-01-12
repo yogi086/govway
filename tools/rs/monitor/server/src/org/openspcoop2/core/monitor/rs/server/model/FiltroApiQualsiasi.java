@@ -21,7 +21,7 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
-import org.openspcoop2.core.monitor.rs.server.model.FiltroApiBase;
+import org.openspcoop2.core.monitor.rs.server.model.FiltroFruizione;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,13 +38,36 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.validation.Valid;
 
-public class FiltroQualsiasi extends FiltroApiBase {
+public class FiltroApiQualsiasi extends FiltroFruizione {
+  
+  @Schema(description = "")
+  private String soggettoRemoto = null;
+ /**
+   * Get soggettoRemoto
+   * @return soggettoRemoto
+  **/
+  @JsonProperty("soggetto_remoto")
+  @Valid
+ @Pattern(regexp="^[0-9A-Za-z]+$") @Size(max=255)  public String getSoggettoRemoto() {
+    return soggettoRemoto;
+  }
+
+  public void setSoggettoRemoto(String soggettoRemoto) {
+    this.soggettoRemoto = soggettoRemoto;
+  }
+
+  public FiltroApiQualsiasi soggettoRemoto(String soggettoRemoto) {
+    this.soggettoRemoto = soggettoRemoto;
+    return this;
+  }
+
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class FiltroQualsiasi {\n");
+    sb.append("class FiltroApiQualsiasi {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    soggettoRemoto: ").append(toIndentedString(soggettoRemoto)).append("\n");
     sb.append("}");
     return sb.toString();
   }

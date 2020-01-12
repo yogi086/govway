@@ -266,10 +266,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneApiBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto,
-			String soggettoRemoto, String tag, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo,
-			TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+	    public byte[] getReportDistribuzioneApiBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String tag, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -361,11 +359,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneApplicativoBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto,
-			String soggettoRemoto, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione,
-			EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport,
-			TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneApplicativoBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -376,7 +371,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaDistribuzioneApplicativo ricerca = new RicercaStatisticaDistribuzioneApplicativo();
 			ricerca.setTipo(tipo);		
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto,soggettoErogatore));
 			ricerca.setAzione(azione);
 
 			FiltroTemporale intervallo = new FiltroTemporale();
@@ -458,11 +453,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneAzioneBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto,
-			String soggettoRemoto, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio,
-			EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport,
-			TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneAzioneBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -473,7 +465,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaDistribuzioneAzione ricerca = new RicercaStatisticaDistribuzioneAzione();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto,soggettoErogatore));
 			FiltroTemporale intervallo = new FiltroTemporale();
 			intervallo.setDataInizio(dataInizio);
 			intervallo.setDataFine(dataFine);
@@ -554,10 +546,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneEsitiBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto,
-			String soggettoRemoto, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione,
-			UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneEsitiBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -568,7 +558,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaDistribuzioneEsiti ricerca = new RicercaStatisticaDistribuzioneEsiti();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto,soggettoErogatore));
 			ricerca.setAzione(azione);
 
 			FiltroTemporale intervallo = new FiltroTemporale();
@@ -646,11 +636,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneIdAutenticatoBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto,
-			String soggettoRemoto, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione,
-			EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport,
-			TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneIdAutenticatoBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -661,7 +648,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaDistribuzioneApplicativo ricerca = new RicercaStatisticaDistribuzioneApplicativo();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto,soggettoErogatore));
 			ricerca.setAzione(azione);
 
 			FiltroTemporale intervallo = new FiltroTemporale();
@@ -743,11 +730,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneSoggettoLocaleBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggettoRemoto,
-			String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione,
-			EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport,
-			TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneSoggettoLocaleBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -758,7 +742,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 
 			RicercaStatisticaDistribuzioneSoggettoLocale ricerca = new RicercaStatisticaDistribuzioneSoggettoLocale();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto,soggettoErogatore));
 			FiltroTemporale intervallo = new FiltroTemporale();
 			intervallo.setDataInizio(dataInizio);
 			intervallo.setDataFine(dataFine);
@@ -837,11 +821,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneSoggettoRemotoBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto,
-			String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione,
-			EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport,
-			TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneSoggettoRemotoBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -852,7 +833,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaDistribuzioneSoggettoRemoto ricerca = new RicercaStatisticaDistribuzioneSoggettoRemoto();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoErogatore));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoErogatore, null));
 			ricerca.setAzione(azione);
 
 			FiltroTemporale intervallo = new FiltroTemporale();
@@ -935,11 +916,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneTemporaleBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto,
-			String soggettoRemoto, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione,
-			EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport,
-			TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneTemporaleBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -950,7 +928,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaAndamentoTemporale ricerca = new RicercaStatisticaAndamentoTemporale();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto, soggettoErogatore));
 			ricerca.setAzione(azione);
 
 			FiltroTemporale intervallo = new FiltroTemporale();
@@ -1031,11 +1009,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 	 *
 	 */
 	@Override
-	public byte[] getReportDistribuzioneTokenInfoBySimpleSearch(DateTime dataInizio, DateTime dataFine,
-			FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, TokenClaimEnum claim, ProfiloEnum profilo,
-			String soggetto, String soggettoRemoto, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio,
-			String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport,
-			TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneTokenInfoBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, TokenClaimEnum claim, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
 		IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -1046,7 +1021,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaDistribuzioneTokenInfo ricerca = new RicercaStatisticaDistribuzioneTokenInfo();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto, soggettoErogatore));
 			ricerca.setAzione(azione);
 
 			FiltroTemporale intervallo = new FiltroTemporale();
@@ -1126,10 +1101,8 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
      *
      */
     @Override
-	public byte[] getReportDistribuzioneIndirizzoIPBySimpleSearch(DateTime dataInizio, DateTime dataFine, 
-    		FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, 
-    		String soggettoRemoto, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, 
-    		EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+    public byte[] getReportDistribuzioneIndirizzoIPBySimpleSearch(DateTime dataInizio, DateTime dataFine, FiltroRicercaRuoloTransazioneEnum tipo, FormatoReportEnum formatoReport, ProfiloEnum profilo, String soggetto, String soggettoRemoto, String soggettoErogatore, String tag, String nomeServizio, String tipoServizio, Integer versioneServizio, String azione, EsitoTransazioneSimpleSearchEnum esito, UnitaTempoReportEnum unitaTempo, TipoReportEnum tipoReport, TipoInformazioneReportEnum tipoInformazioneReport) {
+
     	IContext context = this.getContext();
 		try {
 			context.getLogger().info("Invocazione in corso ...");
@@ -1140,7 +1113,7 @@ public class ReportisticaApiServiceImpl extends BaseImpl implements Reportistica
 			MonitoraggioEnv env = new MonitoraggioEnv(context, profilo, soggetto, this.log);
 			RicercaStatisticaDistribuzioneApplicativo ricerca = new RicercaStatisticaDistribuzioneApplicativo();
 			ricerca.setTipo(tipo);
-			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto));
+			ricerca.setApi(ReportisticaHelper.parseFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto, soggettoErogatore));
 			ricerca.setAzione(azione);
 
 			FiltroTemporale intervallo = new FiltroTemporale();

@@ -53,7 +53,7 @@ import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteFruizioneToken
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIdAutenticato;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteIndirizzoIP;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroMittenteQualsiasi;
-import org.openspcoop2.core.monitor.rs.server.model.FiltroQualsiasi;
+import org.openspcoop2.core.monitor.rs.server.model.FiltroApiQualsiasi;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroRicercaRuoloTransazioneEnum;
 import org.openspcoop2.core.monitor.rs.server.model.FormatoReportEnum;
 import org.openspcoop2.core.monitor.rs.server.model.OccupazioneBandaEnum;
@@ -496,7 +496,7 @@ public class ReportisticaHelper {
 			overrideFiltroFruizione(body.getTag(),deserializev2(body.getApi(), FiltroFruizione.class), wrap, env);
 			break;
 		case QUALSIASI:
-			overrideFiltroQualsiasi(body.getTag(),deserializev2(body.getApi(), FiltroQualsiasi.class), wrap, env);
+			overrideFiltroQualsiasi(body.getTag(),deserializev2(body.getApi(), FiltroApiQualsiasi.class), wrap, env);
 			break;
 		}
 	}
@@ -506,11 +506,7 @@ public class ReportisticaHelper {
 		if (body == null) return;
 		
 		IDSoggetto erogatore = new IDSoggetto(env.soggetto.getTipo(), body.getErogatore());
-		
 		overrideFiltroApiBase(tag, body, erogatore, wrap, env);
-		
-		if (body.getErogatore() != null)
-			wrap.overrideParameter(CostantiExporter.DESTINATARIO, erogatore.toString() );
 	}
 
 	public static final void overrideFiltroErogazione(String tag, FiltroErogazione body, HttpRequestWrapper wrap, MonitoraggioEnv env) {
@@ -519,11 +515,16 @@ public class ReportisticaHelper {
 		overrideFiltroApiBase(tag, body, env.soggetto, wrap, env);
 	}
 	
-	public static final void overrideFiltroQualsiasi(String tag, FiltroQualsiasi body, HttpRequestWrapper wrap, MonitoraggioEnv env) {
+	public static final void overrideFiltroQualsiasi(String tag, FiltroApiQualsiasi body, HttpRequestWrapper wrap, MonitoraggioEnv env) {
 		if (body == null)
 			return;
 		
-		overrideFiltroApiBase(tag, body, env.soggetto, wrap, env);
+		overrideFiltroFruizione(tag, body, wrap, env);
+		if (!StringUtils.isEmpty(body.getSoggettoRemoto())) {
+			IDSoggetto remoto = new IDSoggetto(env.soggetto.getTipo(), body.getSoggettoRemoto());
+			wrap.overrideParameter(CostantiExporter.TRAFFICO_PER_SOGGETTO, remoto.toString() );
+		}
+		
 	}
 
 	public static final void overrideFiltroApiBase(String tag, FiltroApiBase filtro_api, IDSoggetto erogatore, HttpRequestWrapper wrap, MonitoraggioEnv env) {
@@ -537,11 +538,11 @@ public class ReportisticaHelper {
 		if ( !StringUtils.isEmpty(filtro_api.getNome()) || filtro_api.getVersione() != null || !StringUtils.isEmpty(filtro_api.getTipo())) {
 			
 			if (StringUtils.isEmpty(filtro_api.getNome())) {
-				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il nome della API");
+				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Filtro Api incompleto. Specificare il nome della API");
 			}
 						
 			if (erogatore == null || isEmpty(erogatore)) {
-				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
+				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Filtro Api incompleto. Specificare il Soggetto Erogatore (Nelle fruizioni è il soggetto remoto)");
 			}
 			
 			if (filtro_api.getVersione() == null) {
@@ -572,7 +573,7 @@ public class ReportisticaHelper {
 			return;
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 
 		overrideRicercaBaseStatisticaSoggetti(body, wrap, env);
@@ -649,7 +650,7 @@ public class ReportisticaHelper {
 				env.soggetto.getNome(), body.getTipo(), body.getReport().getFormato(), TipoReport.applicativo);
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 
 		overrideRicercaBaseStatisticaSoggetti(body, wrap, env);
@@ -687,7 +688,7 @@ public class ReportisticaHelper {
 	public static final byte[] getReportDistribuzioneEsiti(RicercaStatisticaDistribuzioneEsiti body,MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
@@ -741,7 +742,7 @@ public class ReportisticaHelper {
 			MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
 		HttpRequestWrapper wrap = searchFormUtilities.getHttpRequestWrapper(env.context, env.profilo,
@@ -759,7 +760,7 @@ public class ReportisticaHelper {
 			break;
 		case QUALSIASI:
 			overrideFiltroMittenteQualsiasi(deserializev2(body.getMittente(), FiltroMittenteQualsiasi.class), wrap, env);
-			overrideFiltroQualsiasi(body.getTag(), deserializev2(body.getApi(), FiltroQualsiasi.class), wrap, env);
+			overrideFiltroQualsiasi(body.getTag(), deserializev2(body.getApi(), FiltroApiQualsiasi.class), wrap, env);
 			break;
 		}
 		overrideFiltroEsito(body.getEsito(), wrap, env);
@@ -771,7 +772,7 @@ public class ReportisticaHelper {
 	public static final byte[] getReportDistribuzioneTemporale(RicercaStatisticaAndamentoTemporale body,MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
@@ -818,7 +819,7 @@ public class ReportisticaHelper {
 			MonitoraggioEnv env) throws Exception {
 		
 		if (body.getAzione() != null && body.getApi() == null) {
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Se viene specificato il filtro 'azione' è necessario specificare anche il filtro Api");
 		}
 		
 		SearchFormUtilities searchFormUtilities = new SearchFormUtilities();
@@ -921,44 +922,74 @@ public class ReportisticaHelper {
 		}
 	}
 	
-	
-	// Continua da qui. Deve essere possibile specificare il soggettoErogatore senza dover specificare il filtroAPI per intero.
-	// Dovrei togliere il vincolo required da FiltroApiBase.nome e fare i controlli a mano come sto facendo.
-	// In questo modo sarà possibile valorizzare solo FiltroFruizione.erogatore e non tutto il resto di FiltroApiBase.
-	public static final Map<String, Object> parseFiltroApiMap(FiltroRicercaRuoloTransazioneEnum tipo, String nomeServizio,
-			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
+	public static final Map<String, Object> parseFiltroApiMap(FiltroRicercaRuoloTransazioneEnum tipo,
+			String nomeServizio, String tipoServizio, Integer versioneServizio, String soggettoRemoto,
+			String soggettoErogatore) {
 		
-		// Se specifico un pezzo del filtroAPI, allora devo avere un filtro completo. (meno i defaults)
-		if (nomeServizio != null || tipoServizio != null || versioneServizio != null)
-		{
-			if(nomeServizio == null) {
-				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificare il nome_servizio");
+		// In caso di Fruizione, fin'ora si è sempre specificato l'erogatore per mezzo del parametro soggettoRemoto.
+		// Per mantenere i controlli corretti sul filtroApi, nel caso FRUIZIONE se viene specificato il soggettoRemoto
+		// allora si sta specificando un pezzo del filtroAPI, che va specificato per intero.
+		if (tipo == FiltroRicercaRuoloTransazioneEnum.FRUIZIONE) {
+			soggettoErogatore = soggettoRemoto;
+		}
+
+		if (tipo == FiltroRicercaRuoloTransazioneEnum.EROGAZIONE 
+				&& (!StringUtils.isEmpty(soggettoRemoto) || !StringUtils.isEmpty(soggettoErogatore))) {
+			
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Nel caso di ruolo <" + tipo
+					+ ">, non bisogna specificare né soggetto_remoto né soggetto_erogatore");
+		}
+
+		if (tipo == FiltroRicercaRuoloTransazioneEnum.FRUIZIONE 
+				&& !StringUtils.isEmpty(soggettoErogatore)
+				&& !StringUtils.isEmpty(soggettoRemoto) 
+				&& !StringUtils.equals(soggettoRemoto, soggettoErogatore)) {
+			
+			throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Ricerca ambigua. Nel caso di ruolo <"
+					+ tipo
+					+ ">, soggettoErogatore e soggettoRemoto specificano la stessa informazione."
+					+ "Se specificati entrambi allora devono essere uguali");
+		}	
+
+		// Se specifico un pezzo del filtroAPI, allora devo avere un filtro completo.
+		// (meno i defaults)
+		if (nomeServizio != null || tipoServizio != null || versioneServizio != null || soggettoErogatore != null) {
+		
+			if (nomeServizio == null) {
+				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Specificare il nome_servizio");
+			}
+
+			if (tipo == FiltroRicercaRuoloTransazioneEnum.FRUIZIONE && (StringUtils.isEmpty(soggettoRemoto) || StringUtils.isEmpty(soggettoErogatore)) ) {
+				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Specificando un filtro API per il ruolo <" + tipo
+						+ ">, è necessario specificare anche il soggetto_remoto (Erogatore in caso di Fruizioni)");
 			}
 			
-			if (tipo == FiltroRicercaRuoloTransazioneEnum.FRUIZIONE && StringUtils.isEmpty(soggettoRemoto))
-			{
-				throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificando il ruolo <" + tipo + "> è necessario specificare anche il soggettoRemoto (Erogatore in caso di Fruizioni)");
+			if (tipo == FiltroRicercaRuoloTransazioneEnum.QUALSIASI && StringUtils.isEmpty(soggettoErogatore)) {
+				throw FaultCode.RICHIESTA_NON_VALIDA_SEMANTICAMENTE.toException("Specificando un filtro API per il ruolo <" + tipo
+						+ ">, è necessario specificare anche il soggetto_erogatore");
 			}
-			// TODO: Gli altri due hanno i defaults. (Che dovrei metttere ora)
+			// TODO: Gli altri due hanno i defaults. (Che dovrei metttere ora?)
 		}
-		
-		if (tipo != FiltroRicercaRuoloTransazioneEnum.FRUIZIONE && !StringUtils.isEmpty(soggettoRemoto))
-		{
-			throw FaultCode.RICHIESTA_NON_VALIDA.toException("Specificare il soggetto_remoto solo in caso di ruolo " + FiltroRicercaRuoloTransazioneEnum.FRUIZIONE );
-		}
-		
-		return buildFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto);
+
+		return buildFiltroApiMap(tipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto, soggettoErogatore);
 	}
 	
-	
+	 
 	public static final Map<String, Object> parseFiltroApiMap(TransazioneRuoloEnum tipo, String nomeServizio,
 			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
+		// In Questo caso non abbiamo il tipo QUALSIASI, quindi parsiamo il filtro senza il soggettoErogatore (ultimo parametro a null)
 		FiltroRicercaRuoloTransazioneEnum newTipo = tipo == TransazioneRuoloEnum.EROGAZIONE ? FiltroRicercaRuoloTransazioneEnum.EROGAZIONE : FiltroRicercaRuoloTransazioneEnum.FRUIZIONE;
-		return parseFiltroApiMap(newTipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto);
+		return parseFiltroApiMap(newTipo, nomeServizio, tipoServizio, versioneServizio, soggettoRemoto,null);
 	}
 	
 	private static final Map<String, Object> buildFiltroApiMap(FiltroRicercaRuoloTransazioneEnum tipo, String nomeServizio,
-			String tipoServizio, Integer versioneServizio, String soggettoRemoto) {
+			String tipoServizio, Integer versioneServizio, String soggettoRemoto, String soggettoErogatore) {
+		
+		// Se non ho specificato nessun pezzo del filtro api, allora per le versioni full è come aver passato un FiltroApi a null.
+		if (StringUtils.isEmpty(nomeServizio) && StringUtils.isEmpty(tipoServizio) && StringUtils.isEmpty(soggettoRemoto) && StringUtils.isEmpty(soggettoErogatore) && versioneServizio == null) {
+			return null;
+		}
+		
 		LinkedHashMap<String, Object> filtroApi = new LinkedHashMap<>();
 		filtroApi.put("nome", nomeServizio);
 		filtroApi.put("tipo", tipoServizio);
@@ -968,9 +999,14 @@ public class ReportisticaHelper {
 		case EROGAZIONE:
 			break;
 		case FRUIZIONE:
+			if (!StringUtils.isEmpty(soggettoErogatore)) {
+				soggettoRemoto = soggettoErogatore;
+			}
 			filtroApi.put("erogatore", soggettoRemoto);
 			break;
 		case QUALSIASI:
+			filtroApi.put("erogatore", soggettoErogatore);
+			filtroApi.put("soggetto_remoto", soggettoRemoto);
 			break;
 		}
 
