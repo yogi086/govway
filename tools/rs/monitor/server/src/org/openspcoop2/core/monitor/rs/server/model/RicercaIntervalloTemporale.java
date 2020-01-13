@@ -21,24 +21,9 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
-import org.openspcoop2.core.monitor.rs.server.model.FiltroEsito;
-import org.openspcoop2.core.monitor.rs.server.model.FiltroRicercaRuoloTransazioneEnum;
-import org.openspcoop2.core.monitor.rs.server.model.FiltroTemporale;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaBaseTransazione;
-import javax.validation.constraints.*;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class RicercaIntervalloTemporale extends RicercaBaseTransazione {
@@ -52,7 +37,7 @@ public class RicercaIntervalloTemporale extends RicercaBaseTransazione {
   @JsonProperty("mittente")
   @Valid
   public Object getMittente() {
-    return mittente;
+    return this.mittente;
   }
 
   public void setMittente(Object mittente) {
@@ -69,8 +54,8 @@ public class RicercaIntervalloTemporale extends RicercaBaseTransazione {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class RicercaIntervalloTemporale {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    mittente: ").append(toIndentedString(mittente)).append("\n");
+    sb.append("    ").append(RicercaIntervalloTemporale.toIndentedString(super.toString())).append("\n");
+    sb.append("    mittente: ").append(RicercaIntervalloTemporale.toIndentedString(this.mittente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

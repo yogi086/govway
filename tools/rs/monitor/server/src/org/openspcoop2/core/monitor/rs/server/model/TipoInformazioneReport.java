@@ -22,20 +22,8 @@
 package org.openspcoop2.core.monitor.rs.server.model;
 
 import org.openspcoop2.core.monitor.rs.server.model.TipoInformazioneReportEnum;
-import javax.validation.constraints.*;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class TipoInformazioneReport  {
@@ -52,7 +40,7 @@ public class TipoInformazioneReport  {
   @JsonProperty("tipo")
   @Valid
   public TipoInformazioneReportEnum getTipo() {
-    return tipo;
+    return this.tipo;
   }
 
   public void setTipo(TipoInformazioneReportEnum tipo) {
@@ -71,7 +59,7 @@ public class TipoInformazioneReport  {
   @JsonProperty("valori")
   @Valid
   public Object getValori() {
-    return valori;
+    return this.valori;
   }
 
   public void setValori(Object valori) {
@@ -89,8 +77,8 @@ public class TipoInformazioneReport  {
     StringBuilder sb = new StringBuilder();
     sb.append("class TipoInformazioneReport {\n");
     
-    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
-    sb.append("    valori: ").append(toIndentedString(valori)).append("\n");
+    sb.append("    tipo: ").append(TipoInformazioneReport.toIndentedString(this.tipo)).append("\n");
+    sb.append("    valori: ").append(TipoInformazioneReport.toIndentedString(this.valori)).append("\n");
     sb.append("}");
     return sb.toString();
   }

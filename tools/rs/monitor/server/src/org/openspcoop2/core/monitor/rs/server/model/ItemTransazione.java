@@ -21,33 +21,19 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
-import java.util.UUID;
 import org.joda.time.DateTime;
 import org.openspcoop2.utils.service.beans.ProfiloEnum;
 import org.openspcoop2.utils.service.beans.TransazioneBase;
 import org.openspcoop2.utils.service.beans.TransazioneContestoEnum;
-import org.openspcoop2.utils.service.beans.TransazioneEsito;
 import org.openspcoop2.utils.service.beans.TransazioneExtDettaglioRichiestaBase;
 import org.openspcoop2.utils.service.beans.TransazioneExtDettaglioRispostaBase;
 import org.openspcoop2.utils.service.beans.TransazioneExtInformazioniApiBase;
 import org.openspcoop2.utils.service.beans.TransazioneExtInformazioniMittenteBase;
 import org.openspcoop2.utils.service.beans.TransazioneExtInformazioniSoggetto;
-import org.openspcoop2.utils.service.beans.TransazioneExtTipo;
-import org.openspcoop2.utils.service.beans.TransazioneRuoloEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class ItemTransazione extends TransazioneBase {
@@ -95,7 +81,7 @@ public class ItemTransazione extends TransazioneBase {
   @NotNull
   @Valid
   public ProfiloEnum getProfilo() {
-    return profilo;
+    return this.profilo;
   }
 
   public void setProfilo(ProfiloEnum profilo) {
@@ -115,7 +101,7 @@ public class ItemTransazione extends TransazioneBase {
   @NotNull
   @Valid
   public TransazioneContestoEnum getContesto() {
-    return contesto;
+    return this.contesto;
   }
 
   public void setContesto(TransazioneContestoEnum contesto) {
@@ -134,7 +120,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("id_cluster")
   @Valid
   public String getIdCluster() {
-    return idCluster;
+    return this.idCluster;
   }
 
   public void setIdCluster(String idCluster) {
@@ -153,7 +139,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("informazioni_emittente")
   @Valid
   public TransazioneExtInformazioniSoggetto getInformazioniEmittente() {
-    return informazioniEmittente;
+    return this.informazioniEmittente;
   }
 
   public void setInformazioniEmittente(TransazioneExtInformazioniSoggetto informazioniEmittente) {
@@ -172,7 +158,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("stato")
   @Valid
   public String getStato() {
-    return stato;
+    return this.stato;
   }
 
   public void setStato(String stato) {
@@ -192,7 +178,7 @@ public class ItemTransazione extends TransazioneBase {
   @NotNull
   @Valid
   public DateTime getData() {
-    return data;
+    return this.data;
   }
 
   public void setData(DateTime data) {
@@ -211,7 +197,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("latenza_servizio")
   @Valid
   public Long getLatenzaServizio() {
-    return latenzaServizio;
+    return this.latenzaServizio;
   }
 
   public void setLatenzaServizio(Long latenzaServizio) {
@@ -230,7 +216,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("latenza_totale")
   @Valid
   public Long getLatenzaTotale() {
-    return latenzaTotale;
+    return this.latenzaTotale;
   }
 
   public void setLatenzaTotale(Long latenzaTotale) {
@@ -249,7 +235,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("richiesta")
   @Valid
   public TransazioneExtDettaglioRichiestaBase getRichiesta() {
-    return richiesta;
+    return this.richiesta;
   }
 
   public void setRichiesta(TransazioneExtDettaglioRichiestaBase richiesta) {
@@ -268,7 +254,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("risposta")
   @Valid
   public TransazioneExtDettaglioRispostaBase getRisposta() {
-    return risposta;
+    return this.risposta;
   }
 
   public void setRisposta(TransazioneExtDettaglioRispostaBase risposta) {
@@ -287,7 +273,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("api")
   @Valid
   public TransazioneExtInformazioniApiBase getApi() {
-    return api;
+    return this.api;
   }
 
   public void setApi(TransazioneExtInformazioniApiBase api) {
@@ -306,7 +292,7 @@ public class ItemTransazione extends TransazioneBase {
   @JsonProperty("mittente")
   @Valid
   public TransazioneExtInformazioniMittenteBase getMittente() {
-    return mittente;
+    return this.mittente;
   }
 
   public void setMittente(TransazioneExtInformazioniMittenteBase mittente) {
@@ -323,19 +309,19 @@ public class ItemTransazione extends TransazioneBase {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ItemTransazione {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    profilo: ").append(toIndentedString(profilo)).append("\n");
-    sb.append("    contesto: ").append(toIndentedString(contesto)).append("\n");
-    sb.append("    idCluster: ").append(toIndentedString(idCluster)).append("\n");
-    sb.append("    informazioniEmittente: ").append(toIndentedString(informazioniEmittente)).append("\n");
-    sb.append("    stato: ").append(toIndentedString(stato)).append("\n");
-    sb.append("    data: ").append(toIndentedString(data)).append("\n");
-    sb.append("    latenzaServizio: ").append(toIndentedString(latenzaServizio)).append("\n");
-    sb.append("    latenzaTotale: ").append(toIndentedString(latenzaTotale)).append("\n");
-    sb.append("    richiesta: ").append(toIndentedString(richiesta)).append("\n");
-    sb.append("    risposta: ").append(toIndentedString(risposta)).append("\n");
-    sb.append("    api: ").append(toIndentedString(api)).append("\n");
-    sb.append("    mittente: ").append(toIndentedString(mittente)).append("\n");
+    sb.append("    ").append(ItemTransazione.toIndentedString(super.toString())).append("\n");
+    sb.append("    profilo: ").append(ItemTransazione.toIndentedString(this.profilo)).append("\n");
+    sb.append("    contesto: ").append(ItemTransazione.toIndentedString(this.contesto)).append("\n");
+    sb.append("    idCluster: ").append(ItemTransazione.toIndentedString(this.idCluster)).append("\n");
+    sb.append("    informazioniEmittente: ").append(ItemTransazione.toIndentedString(this.informazioniEmittente)).append("\n");
+    sb.append("    stato: ").append(ItemTransazione.toIndentedString(this.stato)).append("\n");
+    sb.append("    data: ").append(ItemTransazione.toIndentedString(this.data)).append("\n");
+    sb.append("    latenzaServizio: ").append(ItemTransazione.toIndentedString(this.latenzaServizio)).append("\n");
+    sb.append("    latenzaTotale: ").append(ItemTransazione.toIndentedString(this.latenzaTotale)).append("\n");
+    sb.append("    richiesta: ").append(ItemTransazione.toIndentedString(this.richiesta)).append("\n");
+    sb.append("    risposta: ").append(ItemTransazione.toIndentedString(this.risposta)).append("\n");
+    sb.append("    api: ").append(ItemTransazione.toIndentedString(this.api)).append("\n");
+    sb.append("    mittente: ").append(ItemTransazione.toIndentedString(this.mittente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

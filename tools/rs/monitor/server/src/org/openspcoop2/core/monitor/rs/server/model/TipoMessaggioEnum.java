@@ -21,8 +21,6 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
-import javax.validation.constraints.*;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -42,7 +40,7 @@ RICHIESTA("richiesta"),
   @Override
   @JsonValue
   public String toString() {
-    return String.valueOf(value);
+    return String.valueOf(this.value);
   }
 
   @JsonCreator

@@ -24,17 +24,7 @@ package org.openspcoop2.core.monitor.rs.server.model;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class FiltroMittenteFruizioneApplicativo  {
@@ -49,7 +39,7 @@ public class FiltroMittenteFruizioneApplicativo  {
   @NotNull
   @Valid
  @Pattern(regexp="^[_A-Za-z][\\-\\._A-Za-z0-9]*$") @Size(max=255)  public String getApplicativo() {
-    return applicativo;
+    return this.applicativo;
   }
 
   public void setApplicativo(String applicativo) {
@@ -67,7 +57,7 @@ public class FiltroMittenteFruizioneApplicativo  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroMittenteFruizioneApplicativo {\n");
     
-    sb.append("    applicativo: ").append(toIndentedString(applicativo)).append("\n");
+    sb.append("    applicativo: ").append(FiltroMittenteFruizioneApplicativo.toIndentedString(this.applicativo)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -27,17 +27,7 @@ import org.openspcoop2.core.monitor.rs.server.model.FiltroTemporale;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class RicercaBaseTransazione  {
@@ -87,7 +77,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("offset")
   @Valid
   public Integer getOffset() {
-    return offset;
+    return this.offset;
   }
 
   public void setOffset(Integer offset) {
@@ -106,7 +96,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("limit")
   @Valid
   public Integer getLimit() {
-    return limit;
+    return this.limit;
   }
 
   public void setLimit(Integer limit) {
@@ -125,7 +115,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("sort")
   @Valid
   public String getSort() {
-    return sort;
+    return this.sort;
   }
 
   public void setSort(String sort) {
@@ -145,7 +135,7 @@ public class RicercaBaseTransazione  {
   @NotNull
   @Valid
   public FiltroTemporale getIntervalloTemporale() {
-    return intervalloTemporale;
+    return this.intervalloTemporale;
   }
 
   public void setIntervalloTemporale(FiltroTemporale intervalloTemporale) {
@@ -165,7 +155,7 @@ public class RicercaBaseTransazione  {
   @NotNull
   @Valid
   public FiltroRicercaRuoloTransazioneEnum getTipo() {
-    return tipo;
+    return this.tipo;
   }
 
   public void setTipo(FiltroRicercaRuoloTransazioneEnum tipo) {
@@ -184,7 +174,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("id_cluster")
   @Valid
   public String getIdCluster() {
-    return idCluster;
+    return this.idCluster;
   }
 
   public void setIdCluster(String idCluster) {
@@ -203,7 +193,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("tag")
   @Valid
  @Pattern(regexp="^[_A-Za-z][\\-\\._A-Za-z0-9]*$") @Size(max=255)  public String getTag() {
-    return tag;
+    return this.tag;
   }
 
   public void setTag(String tag) {
@@ -222,7 +212,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("api")
   @Valid
   public Object getApi() {
-    return api;
+    return this.api;
   }
 
   public void setApi(Object api) {
@@ -241,7 +231,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("azione")
   @Valid
  @Pattern(regexp="^[_A-Za-z][\\-\\._A-Za-z0-9]*$") @Size(max=255)  public String getAzione() {
-    return azione;
+    return this.azione;
   }
 
   public void setAzione(String azione) {
@@ -260,7 +250,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("esito")
   @Valid
   public FiltroEsito getEsito() {
-    return esito;
+    return this.esito;
   }
 
   public void setEsito(FiltroEsito esito) {
@@ -279,7 +269,7 @@ public class RicercaBaseTransazione  {
   @JsonProperty("evento")
   @Valid
   public String getEvento() {
-    return evento;
+    return this.evento;
   }
 
   public void setEvento(String evento) {
@@ -297,17 +287,17 @@ public class RicercaBaseTransazione  {
     StringBuilder sb = new StringBuilder();
     sb.append("class RicercaBaseTransazione {\n");
     
-    sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
-    sb.append("    limit: ").append(toIndentedString(limit)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    intervalloTemporale: ").append(toIndentedString(intervalloTemporale)).append("\n");
-    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
-    sb.append("    idCluster: ").append(toIndentedString(idCluster)).append("\n");
-    sb.append("    tag: ").append(toIndentedString(tag)).append("\n");
-    sb.append("    api: ").append(toIndentedString(api)).append("\n");
-    sb.append("    azione: ").append(toIndentedString(azione)).append("\n");
-    sb.append("    esito: ").append(toIndentedString(esito)).append("\n");
-    sb.append("    evento: ").append(toIndentedString(evento)).append("\n");
+    sb.append("    offset: ").append(RicercaBaseTransazione.toIndentedString(this.offset)).append("\n");
+    sb.append("    limit: ").append(RicercaBaseTransazione.toIndentedString(this.limit)).append("\n");
+    sb.append("    sort: ").append(RicercaBaseTransazione.toIndentedString(this.sort)).append("\n");
+    sb.append("    intervalloTemporale: ").append(RicercaBaseTransazione.toIndentedString(this.intervalloTemporale)).append("\n");
+    sb.append("    tipo: ").append(RicercaBaseTransazione.toIndentedString(this.tipo)).append("\n");
+    sb.append("    idCluster: ").append(RicercaBaseTransazione.toIndentedString(this.idCluster)).append("\n");
+    sb.append("    tag: ").append(RicercaBaseTransazione.toIndentedString(this.tag)).append("\n");
+    sb.append("    api: ").append(RicercaBaseTransazione.toIndentedString(this.api)).append("\n");
+    sb.append("    azione: ").append(RicercaBaseTransazione.toIndentedString(this.azione)).append("\n");
+    sb.append("    esito: ").append(RicercaBaseTransazione.toIndentedString(this.esito)).append("\n");
+    sb.append("    evento: ").append(RicercaBaseTransazione.toIndentedString(this.evento)).append("\n");
     sb.append("}");
     return sb.toString();
   }

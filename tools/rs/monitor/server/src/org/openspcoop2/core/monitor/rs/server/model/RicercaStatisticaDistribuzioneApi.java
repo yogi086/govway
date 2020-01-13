@@ -22,25 +22,12 @@
 package org.openspcoop2.core.monitor.rs.server.model;
 
 import org.openspcoop2.core.monitor.rs.server.model.FiltroEsito;
-import org.openspcoop2.core.monitor.rs.server.model.FiltroRicercaRuoloTransazioneEnum;
-import org.openspcoop2.core.monitor.rs.server.model.FiltroTemporale;
 import org.openspcoop2.core.monitor.rs.server.model.OpzioniGenerazioneReport;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaBaseStatistica;
-import org.openspcoop2.core.monitor.rs.server.model.UnitaTempoReportEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class RicercaStatisticaDistribuzioneApi extends RicercaBaseStatistica {
@@ -64,7 +51,7 @@ public class RicercaStatisticaDistribuzioneApi extends RicercaBaseStatistica {
   @NotNull
   @Valid
   public OpzioniGenerazioneReport getReport() {
-    return report;
+    return this.report;
   }
 
   public void setReport(OpzioniGenerazioneReport report) {
@@ -83,7 +70,7 @@ public class RicercaStatisticaDistribuzioneApi extends RicercaBaseStatistica {
   @JsonProperty("soggetto_erogatore")
   @Valid
   public Object getSoggettoErogatore() {
-    return soggettoErogatore;
+    return this.soggettoErogatore;
   }
 
   public void setSoggettoErogatore(Object soggettoErogatore) {
@@ -102,7 +89,7 @@ public class RicercaStatisticaDistribuzioneApi extends RicercaBaseStatistica {
   @JsonProperty("mittente")
   @Valid
   public Object getMittente() {
-    return mittente;
+    return this.mittente;
   }
 
   public void setMittente(Object mittente) {
@@ -121,7 +108,7 @@ public class RicercaStatisticaDistribuzioneApi extends RicercaBaseStatistica {
   @JsonProperty("esito")
   @Valid
   public FiltroEsito getEsito() {
-    return esito;
+    return this.esito;
   }
 
   public void setEsito(FiltroEsito esito) {
@@ -138,11 +125,11 @@ public class RicercaStatisticaDistribuzioneApi extends RicercaBaseStatistica {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class RicercaStatisticaDistribuzioneApi {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    report: ").append(toIndentedString(report)).append("\n");
-    sb.append("    soggettoErogatore: ").append(toIndentedString(soggettoErogatore)).append("\n");
-    sb.append("    mittente: ").append(toIndentedString(mittente)).append("\n");
-    sb.append("    esito: ").append(toIndentedString(esito)).append("\n");
+    sb.append("    ").append(RicercaStatisticaDistribuzioneApi.toIndentedString(super.toString())).append("\n");
+    sb.append("    report: ").append(RicercaStatisticaDistribuzioneApi.toIndentedString(this.report)).append("\n");
+    sb.append("    soggettoErogatore: ").append(RicercaStatisticaDistribuzioneApi.toIndentedString(this.soggettoErogatore)).append("\n");
+    sb.append("    mittente: ").append(RicercaStatisticaDistribuzioneApi.toIndentedString(this.mittente)).append("\n");
+    sb.append("    esito: ").append(RicercaStatisticaDistribuzioneApi.toIndentedString(this.esito)).append("\n");
     sb.append("}");
     return sb.toString();
   }

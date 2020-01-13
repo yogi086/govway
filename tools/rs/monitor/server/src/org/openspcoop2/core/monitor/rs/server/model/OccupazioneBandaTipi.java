@@ -21,20 +21,8 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
-import javax.validation.constraints.*;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class OccupazioneBandaTipi  {
@@ -54,7 +42,7 @@ public class OccupazioneBandaTipi  {
   @JsonProperty("banda_complessiva")
   @Valid
   public Boolean isBandaComplessiva() {
-    return bandaComplessiva;
+    return this.bandaComplessiva;
   }
 
   public void setBandaComplessiva(Boolean bandaComplessiva) {
@@ -73,7 +61,7 @@ public class OccupazioneBandaTipi  {
   @JsonProperty("banda_interna")
   @Valid
   public Boolean isBandaInterna() {
-    return bandaInterna;
+    return this.bandaInterna;
   }
 
   public void setBandaInterna(Boolean bandaInterna) {
@@ -92,7 +80,7 @@ public class OccupazioneBandaTipi  {
   @JsonProperty("banda_esterna")
   @Valid
   public Boolean isBandaEsterna() {
-    return bandaEsterna;
+    return this.bandaEsterna;
   }
 
   public void setBandaEsterna(Boolean bandaEsterna) {
@@ -110,9 +98,9 @@ public class OccupazioneBandaTipi  {
     StringBuilder sb = new StringBuilder();
     sb.append("class OccupazioneBandaTipi {\n");
     
-    sb.append("    bandaComplessiva: ").append(toIndentedString(bandaComplessiva)).append("\n");
-    sb.append("    bandaInterna: ").append(toIndentedString(bandaInterna)).append("\n");
-    sb.append("    bandaEsterna: ").append(toIndentedString(bandaEsterna)).append("\n");
+    sb.append("    bandaComplessiva: ").append(OccupazioneBandaTipi.toIndentedString(this.bandaComplessiva)).append("\n");
+    sb.append("    bandaInterna: ").append(OccupazioneBandaTipi.toIndentedString(this.bandaInterna)).append("\n");
+    sb.append("    bandaEsterna: ").append(OccupazioneBandaTipi.toIndentedString(this.bandaEsterna)).append("\n");
     sb.append("}");
     return sb.toString();
   }

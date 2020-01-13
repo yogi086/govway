@@ -21,23 +21,11 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
-import org.openspcoop2.utils.service.beans.FiltroRicercaId;
 import org.openspcoop2.core.monitor.rs.server.model.FiltroTokenClaimBase;
-import org.openspcoop2.core.monitor.rs.server.model.TokenClaimEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class FiltroMittenteFruizioneTokenClaim extends FiltroTokenClaimBase {
@@ -57,7 +45,7 @@ public class FiltroMittenteFruizioneTokenClaim extends FiltroTokenClaimBase {
   @JsonProperty("ricerca_esatta")
   @Valid
   public Boolean isRicercaEsatta() {
-    return ricercaEsatta;
+    return this.ricercaEsatta;
   }
 
   public void setRicercaEsatta(Boolean ricercaEsatta) {
@@ -76,7 +64,7 @@ public class FiltroMittenteFruizioneTokenClaim extends FiltroTokenClaimBase {
   @JsonProperty("case_sensitive")
   @Valid
   public Boolean isCaseSensitive() {
-    return caseSensitive;
+    return this.caseSensitive;
   }
 
   public void setCaseSensitive(Boolean caseSensitive) {
@@ -96,7 +84,7 @@ public class FiltroMittenteFruizioneTokenClaim extends FiltroTokenClaimBase {
   @NotNull
   @Valid
   public String getId() {
-    return id;
+    return this.id;
   }
 
   public void setId(String id) {
@@ -113,10 +101,10 @@ public class FiltroMittenteFruizioneTokenClaim extends FiltroTokenClaimBase {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroMittenteFruizioneTokenClaim {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    ricercaEsatta: ").append(toIndentedString(ricercaEsatta)).append("\n");
-    sb.append("    caseSensitive: ").append(toIndentedString(caseSensitive)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    ").append(FiltroMittenteFruizioneTokenClaim.toIndentedString(super.toString())).append("\n");
+    sb.append("    ricercaEsatta: ").append(FiltroMittenteFruizioneTokenClaim.toIndentedString(this.ricercaEsatta)).append("\n");
+    sb.append("    caseSensitive: ").append(FiltroMittenteFruizioneTokenClaim.toIndentedString(this.caseSensitive)).append("\n");
+    sb.append("    id: ").append(FiltroMittenteFruizioneTokenClaim.toIndentedString(this.id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -21,24 +21,12 @@
  */
 package org.openspcoop2.core.monitor.rs.server.model;
 
-import org.openspcoop2.core.monitor.rs.server.model.FiltroEsito;
-import org.openspcoop2.core.monitor.rs.server.model.OpzioniGenerazioneReport;
 import org.openspcoop2.core.monitor.rs.server.model.RicercaStatisticaDistribuzioneApplicativo;
 import org.openspcoop2.core.monitor.rs.server.model.TokenClaimEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class RicercaStatisticaDistribuzioneTokenInfo extends RicercaStatisticaDistribuzioneApplicativo {
@@ -56,7 +44,7 @@ public class RicercaStatisticaDistribuzioneTokenInfo extends RicercaStatisticaDi
   @NotNull
   @Valid
   public TokenClaimEnum getClaim() {
-    return claim;
+    return this.claim;
   }
 
   public void setClaim(TokenClaimEnum claim) {
@@ -75,7 +63,7 @@ public class RicercaStatisticaDistribuzioneTokenInfo extends RicercaStatisticaDi
   @JsonProperty("soggetto")
   @Valid
   public Object getSoggetto() {
-    return soggetto;
+    return this.soggetto;
   }
 
   public void setSoggetto(Object soggetto) {
@@ -92,9 +80,9 @@ public class RicercaStatisticaDistribuzioneTokenInfo extends RicercaStatisticaDi
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class RicercaStatisticaDistribuzioneTokenInfo {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    claim: ").append(toIndentedString(claim)).append("\n");
-    sb.append("    soggetto: ").append(toIndentedString(soggetto)).append("\n");
+    sb.append("    ").append(RicercaStatisticaDistribuzioneTokenInfo.toIndentedString(super.toString())).append("\n");
+    sb.append("    claim: ").append(RicercaStatisticaDistribuzioneTokenInfo.toIndentedString(this.claim)).append("\n");
+    sb.append("    soggetto: ").append(RicercaStatisticaDistribuzioneTokenInfo.toIndentedString(this.soggetto)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -25,17 +25,7 @@ import org.openspcoop2.core.monitor.rs.server.model.TokenClaimEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class FiltroTokenClaimBase  {
@@ -50,7 +40,7 @@ public class FiltroTokenClaimBase  {
   @NotNull
   @Valid
   public TokenClaimEnum getClaim() {
-    return claim;
+    return this.claim;
   }
 
   public void setClaim(TokenClaimEnum claim) {
@@ -68,7 +58,7 @@ public class FiltroTokenClaimBase  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroTokenClaimBase {\n");
     
-    sb.append("    claim: ").append(toIndentedString(claim)).append("\n");
+    sb.append("    claim: ").append(FiltroTokenClaimBase.toIndentedString(this.claim)).append("\n");
     sb.append("}");
     return sb.toString();
   }

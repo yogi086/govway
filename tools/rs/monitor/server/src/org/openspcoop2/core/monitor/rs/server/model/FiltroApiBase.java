@@ -24,17 +24,7 @@ package org.openspcoop2.core.monitor.rs.server.model;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class FiltroApiBase  {
@@ -54,7 +44,7 @@ public class FiltroApiBase  {
   @JsonProperty("tipo")
   @Valid
  @Size(max=20)  public String getTipo() {
-    return tipo;
+    return this.tipo;
   }
 
   public void setTipo(String tipo) {
@@ -73,7 +63,7 @@ public class FiltroApiBase  {
   @JsonProperty("nome")
   @Valid
  @Pattern(regexp="^[_A-Za-z][\\-\\._A-Za-z0-9]*$") @Size(max=255)  public String getNome() {
-    return nome;
+    return this.nome;
   }
 
   public void setNome(String nome) {
@@ -92,7 +82,7 @@ public class FiltroApiBase  {
   @JsonProperty("versione")
   @Valid
   public Integer getVersione() {
-    return versione;
+    return this.versione;
   }
 
   public void setVersione(Integer versione) {
@@ -110,9 +100,9 @@ public class FiltroApiBase  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroApiBase {\n");
     
-    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
-    sb.append("    nome: ").append(toIndentedString(nome)).append("\n");
-    sb.append("    versione: ").append(toIndentedString(versione)).append("\n");
+    sb.append("    tipo: ").append(FiltroApiBase.toIndentedString(this.tipo)).append("\n");
+    sb.append("    nome: ").append(FiltroApiBase.toIndentedString(this.nome)).append("\n");
+    sb.append("    versione: ").append(FiltroApiBase.toIndentedString(this.versione)).append("\n");
     sb.append("}");
     return sb.toString();
   }

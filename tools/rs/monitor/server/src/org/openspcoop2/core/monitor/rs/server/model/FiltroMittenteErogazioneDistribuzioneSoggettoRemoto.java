@@ -23,20 +23,7 @@ package org.openspcoop2.core.monitor.rs.server.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.openspcoop2.core.monitor.rs.server.model.TipoFiltroMittenteErogazioneSoggettoRemotoEnum;
-import javax.validation.constraints.*;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 /**
@@ -57,7 +44,7 @@ public class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto  {
   @JsonProperty("tipo")
   @Valid
   public TipoFiltroMittenteErogazioneSoggettoRemotoEnum getTipo() {
-    return tipo;
+    return this.tipo;
   }
 
   public void setTipo(TipoFiltroMittenteErogazioneSoggettoRemotoEnum tipo) {
@@ -76,7 +63,7 @@ public class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto  {
   @JsonProperty("id")
   @Valid
   public Object getId() {
-    return id;
+    return this.id;
   }
 
   public void setId(Object id) {
@@ -94,8 +81,8 @@ public class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroMittenteErogazioneDistribuzioneSoggettoRemoto {\n");
     
-    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    tipo: ").append(FiltroMittenteErogazioneDistribuzioneSoggettoRemoto.toIndentedString(this.tipo)).append("\n");
+    sb.append("    id: ").append(FiltroMittenteErogazioneDistribuzioneSoggettoRemoto.toIndentedString(this.id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

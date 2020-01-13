@@ -25,17 +25,7 @@ import org.openspcoop2.utils.service.beans.TransazioneRuoloEnum;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class RicercaConfigurazioneApi  {
@@ -53,7 +43,7 @@ public class RicercaConfigurazioneApi  {
   @NotNull
   @Valid
   public TransazioneRuoloEnum getTipo() {
-    return tipo;
+    return this.tipo;
   }
 
   public void setTipo(TransazioneRuoloEnum tipo) {
@@ -72,7 +62,7 @@ public class RicercaConfigurazioneApi  {
   @JsonProperty("api")
   @Valid
   public Object getApi() {
-    return api;
+    return this.api;
   }
 
   public void setApi(Object api) {
@@ -90,8 +80,8 @@ public class RicercaConfigurazioneApi  {
     StringBuilder sb = new StringBuilder();
     sb.append("class RicercaConfigurazioneApi {\n");
     
-    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
-    sb.append("    api: ").append(toIndentedString(api)).append("\n");
+    sb.append("    tipo: ").append(RicercaConfigurazioneApi.toIndentedString(this.tipo)).append("\n");
+    sb.append("    api: ").append(RicercaConfigurazioneApi.toIndentedString(this.api)).append("\n");
     sb.append("}");
     return sb.toString();
   }

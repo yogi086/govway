@@ -25,17 +25,7 @@ import org.joda.time.DateTime;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class FiltroTemporale  {
@@ -53,7 +43,7 @@ public class FiltroTemporale  {
   @NotNull
   @Valid
   public DateTime getDataInizio() {
-    return dataInizio;
+    return this.dataInizio;
   }
 
   public void setDataInizio(DateTime dataInizio) {
@@ -73,7 +63,7 @@ public class FiltroTemporale  {
   @NotNull
   @Valid
   public DateTime getDataFine() {
-    return dataFine;
+    return this.dataFine;
   }
 
   public void setDataFine(DateTime dataFine) {
@@ -91,8 +81,8 @@ public class FiltroTemporale  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroTemporale {\n");
     
-    sb.append("    dataInizio: ").append(toIndentedString(dataInizio)).append("\n");
-    sb.append("    dataFine: ").append(toIndentedString(dataFine)).append("\n");
+    sb.append("    dataInizio: ").append(FiltroTemporale.toIndentedString(this.dataInizio)).append("\n");
+    sb.append("    dataFine: ").append(FiltroTemporale.toIndentedString(this.dataFine)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -25,17 +25,7 @@ import org.openspcoop2.core.monitor.rs.server.model.EsitoTransazioneFullSearchEn
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class FiltroEsito  {
@@ -53,7 +43,7 @@ public class FiltroEsito  {
   @NotNull
   @Valid
   public EsitoTransazioneFullSearchEnum getTipo() {
-    return tipo;
+    return this.tipo;
   }
 
   public void setTipo(EsitoTransazioneFullSearchEnum tipo) {
@@ -72,7 +62,7 @@ public class FiltroEsito  {
   @JsonProperty("dettaglio")
   @Valid
   public Object getDettaglio() {
-    return dettaglio;
+    return this.dettaglio;
   }
 
   public void setDettaglio(Object dettaglio) {
@@ -90,8 +80,8 @@ public class FiltroEsito  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroEsito {\n");
     
-    sb.append("    tipo: ").append(toIndentedString(tipo)).append("\n");
-    sb.append("    dettaglio: ").append(toIndentedString(dettaglio)).append("\n");
+    sb.append("    tipo: ").append(FiltroEsito.toIndentedString(this.tipo)).append("\n");
+    sb.append("    dettaglio: ").append(FiltroEsito.toIndentedString(this.dettaglio)).append("\n");
     sb.append("}");
     return sb.toString();
   }

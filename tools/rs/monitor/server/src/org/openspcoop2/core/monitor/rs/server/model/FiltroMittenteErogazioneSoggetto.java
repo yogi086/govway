@@ -24,17 +24,7 @@ package org.openspcoop2.core.monitor.rs.server.model;
 import javax.validation.constraints.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.Valid;
 
 public class FiltroMittenteErogazioneSoggetto  {
@@ -49,7 +39,7 @@ public class FiltroMittenteErogazioneSoggetto  {
   @NotNull
   @Valid
  @Pattern(regexp="^[0-9A-Za-z]+$") @Size(max=255)  public String getSoggetto() {
-    return soggetto;
+    return this.soggetto;
   }
 
   public void setSoggetto(String soggetto) {
@@ -67,7 +57,7 @@ public class FiltroMittenteErogazioneSoggetto  {
     StringBuilder sb = new StringBuilder();
     sb.append("class FiltroMittenteErogazioneSoggetto {\n");
     
-    sb.append("    soggetto: ").append(toIndentedString(soggetto)).append("\n");
+    sb.append("    soggetto: ").append(FiltroMittenteErogazioneSoggetto.toIndentedString(this.soggetto)).append("\n");
     sb.append("}");
     return sb.toString();
   }
